@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Care-Labs / PulseReport — Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  font-size: 14px;
+  color: #1e293b;
+  background: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Form helpers added for CRUD screens */
+.form-card {
+  margin-bottom: 1rem;
+}
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.85rem;
+}
+.grid-form input,
+.grid-form select,
+.grid-form textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  background: #fff;
+}
+.grid-form textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  grid-column: 1 / -1;
+}
+.btn-secondary {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #374151;
+  border-radius: 0.75rem;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+}

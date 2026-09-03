@@ -1,0 +1,105 @@
+<div class="view-container">
+  <div class="page-hero">
+    <div>
+      <span class="eyebrow">{{ 'users.eyebrow' | translate }}</span>
+      <h2>{{ 'users.title' | translate }}</h2>
+      <p>{{ 'users.subtitle' | translate }}</p>
+    </div>
+    <div class="hero-pill">
+      {{ usersStore.users().length }} {{ 'users.accounts' | translate }}
+    </div>
+  </div>
+
+  @if (usersStore.errorKey()) {
+  <div class="banner error" role="alert">
+    {{ usersStore.errorKey()! | translate }}
+  </div>
+  } @if (usersStore.updatedUserId()) {
+  <div class="banner success" role="status">
+    {{ 'users.updated' | translate }}
+  </div>
+  }
+
+  <div class="card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'common.user' | translate }}</th>
+          <th>{{ 'users.currentRole' | translate }}</th>
+          <th>{{ 'users.newRole' | translate }}</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (user of usersStore.users(); track user.id) {
+        <tr>
+          <td>
+            <div class="user-cell">
+              <span class="user-avatar">{{ initialsOf(user) }}</span>
+              <div class="user-meta">
+                <strong>{{ user.username }}</strong>
+                @if (isCurrentUser(user)) {
+                <small>{{ 'users.you' | translate }}</small>
+                }
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="role-chip" [class]="'role-chip ' + user.primaryRole">
+              {{ roleLabelKey(user.primaryRole) | translate }}
+            </span>
+          </td>
+          <td>
+            <select
+              class="role-select"
+              [value]="selectedRole(user)"
+              [disabled]="isCurrentUser(user)"
+              (change)="onRoleSelected(user, $any($event.target).value)"
+            >
+              @for (role of assignableRoles; track role) {
+              <option [value]="role">
+                {{ roleLabelKey(role) | translate }}
+              </option>
+              }
+            </select>
+          </td>
+          <td class="action-cell">
+            @if (isCurrentUser(user)) {
+            <span class="self-hint">{{ 'users.selfHint' | translate }}</span>
+            } @else {
+            <button
+              class="apply-btn"
+              type="button"
+              [disabled]="
+                !hasPendingChange(user) ||
+                usersStore.updatingUserId() === user.id
+              "
+              (click)="applyRole(user)"
+            >
+              @if (usersStore.updatingUserId() === user.id) {
+              {{ 'users.applying' | translate }}
+              } @else {
+              {{ 'users.apply' | translate }}
+              }
+            </button>
+            }
+          </td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="4">
+            <div class="empty-state">
+              @if (usersStore.loading()) {
+              {{ 'users.loading' | translate }}
+              } @else {
+              {{ 'users.empty' | translate }}
+              }
+            </div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

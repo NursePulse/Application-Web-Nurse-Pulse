@@ -1,0 +1,18 @@
+<div
+  class="layout-wrapper"
+  [class.admin-view]="viewModeStore.isAdmin()"
+  [class.doctor-view]="viewModeStore.isDoctor()"
+  [class.nurse-view]="viewModeStore.isNurse()"
+>
+  <app-sidebar></app-sidebar>
+  <div class="layout-main">
+    <app-header [pageTitle]="pageTitle()"></app-header>
+    <main class="layout-content">
+      <router-outlet></router-outlet>
+    </main>
+    <footer class="layout-footer">
+      © {{ currentYear }} Care-Labs · PulseReport · {{ 'footer.rights' |
+      translate }}
+    </footer>
+  </div>
+</div>

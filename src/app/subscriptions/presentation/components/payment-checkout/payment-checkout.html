@@ -1,0 +1,274 @@
+<div class="checkout-backdrop" (click)="requestClose()">
+  <section
+    class="checkout-shell"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="'checkout.title' | translate"
+    (click)="$event.stopPropagation()"
+  >
+    <aside class="checkout-summary">
+      <div class="brand-lockup">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 12h10M12 7v10" />
+            <rect x="3" y="3" width="18" height="18" rx="6" />
+          </svg>
+        </span>
+        <div>
+          <strong>PulseReport</strong>
+          <small>{{ 'checkout.secureBilling' | translate }}</small>
+        </div>
+      </div>
+
+      <div class="plan-summary">
+        <span>{{ 'checkout.yourPlan' | translate }}</span>
+        <h2>{{ plan().nameKey | translate }}</h2>
+        <p>{{ plan().descriptionKey | translate }}</p>
+      </div>
+
+      <div class="total-row">
+        <div>
+          <span>{{ 'checkout.monthlyTotal' | translate }}</span>
+          <small>{{ 'checkout.renewsMonthly' | translate }}</small>
+        </div>
+        <strong
+          >{{ plan().monthlyPrice | currency:'USD':'symbol':'1.2-2' }}</strong
+        >
+      </div>
+
+      <ul class="trust-list">
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+          {{ 'checkout.noCardStorage' | translate }}
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="10" width="16" height="11" rx="2" />
+            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+          </svg>
+          {{ 'checkout.encryptedConnection' | translate }}
+        </li>
+      </ul>
+    </aside>
+
+    <div class="checkout-content">
+      <button
+        class="close-checkout"
+        type="button"
+        [disabled]="processing()"
+        [attr.aria-label]="'common.close' | translate"
+        (click)="requestClose()"
+      >
+        &times;
+      </button>
+
+      @if (receipt(); as approvedReceipt) {
+      <div class="payment-success" aria-live="polite">
+        <div class="success-orbit">
+          <span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m5 12 4 4L19 6" />
+            </svg>
+          </span>
+        </div>
+        <span class="success-eyebrow"
+          >{{ 'checkout.approved' | translate }}</span
+        >
+        <h2>{{ 'checkout.successTitle' | translate }}</h2>
+        <p>{{ 'checkout.successText' | translate }}</p>
+
+        <dl class="receipt">
+          <div>
+            <dt>{{ 'checkout.transaction' | translate }}</dt>
+            <dd>{{ approvedReceipt.transactionId }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'checkout.paymentMethod' | translate }}</dt>
+            <dd>{{ maskedCard() }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'checkout.date' | translate }}</dt>
+            <dd>{{ approvedReceipt.paidAt | date:'dd/MM/yyyy, h:mm a' }}</dd>
+          </div>
+          <div>
+            <dt>{{ 'checkout.totalPaid' | translate }}</dt>
+            <dd>
+              {{ approvedReceipt.amount | currency:'USD':'symbol':'1.2-2' }}
+            </dd>
+          </div>
+        </dl>
+
+        <button
+          class="primary-payment-button"
+          type="button"
+          (click)="requestClose()"
+        >
+          {{ 'checkout.goToPlan' | translate }}
+        </button>
+      </div>
+      } @else {
+      <header class="checkout-heading">
+        <span>{{ 'checkout.step' | translate }}</span>
+        <h2>{{ 'checkout.title' | translate }}</h2>
+        <p>{{ 'checkout.subtitle' | translate }}</p>
+      </header>
+
+      <form [formGroup]="checkoutForm" (ngSubmit)="submitPayment()">
+        <div class="form-section-label">
+          <span>1</span>
+          {{ 'checkout.billingDetails' | translate }}
+        </div>
+
+        <div class="field-grid">
+          <label class="field full">
+            <span>{{ 'checkout.cardholderName' | translate }}</span>
+            <input
+              type="text"
+              formControlName="cardholderName"
+              autocomplete="cc-name"
+              [class.invalid]="fieldInvalid('cardholderName')"
+              [placeholder]="'checkout.cardholderPlaceholder' | translate"
+            />
+            @if (fieldInvalid('cardholderName')) {
+            <small>{{ 'checkout.nameError' | translate }}</small>
+            }
+          </label>
+
+          <label class="field full">
+            <span>{{ 'checkout.billingEmail' | translate }}</span>
+            <input
+              type="email"
+              formControlName="billingEmail"
+              autocomplete="email"
+              [class.invalid]="fieldInvalid('billingEmail')"
+              placeholder="billing@care-labs.pe"
+            />
+            @if (fieldInvalid('billingEmail')) {
+            <small>{{ 'checkout.emailError' | translate }}</small>
+            }
+          </label>
+
+          <label class="field document-type">
+            <span>{{ 'checkout.documentType' | translate }}</span>
+            <select
+              formControlName="documentType"
+              (change)="updateDocumentType($any($event.target).value)"
+            >
+              <option value="DNI">DNI</option>
+              <option value="RUC">RUC</option>
+            </select>
+          </label>
+
+          <label class="field document-number">
+            <span>{{ documentType() }}</span>
+            <input
+              type="text"
+              inputmode="numeric"
+              formControlName="documentNumber"
+              [class.invalid]="fieldInvalid('documentNumber')"
+              [attr.maxlength]="documentType() === 'DNI' ? 8 : 11"
+              (input)="updateDocumentNumber($any($event.target).value)"
+            />
+            @if (fieldInvalid('documentNumber')) {
+            <small>{{ 'checkout.documentError' | translate }}</small>
+            }
+          </label>
+        </div>
+
+        <div class="form-section-label payment-label">
+          <span>2</span>
+          {{ 'checkout.paymentDetails' | translate }}
+          <div
+            class="card-logos"
+            aria-label="Visa, Mastercard, American Express"
+          >
+            <b>VISA</b><b>MC</b><b>AMEX</b>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <label class="field full card-number-field">
+            <span>{{ 'checkout.cardNumber' | translate }}</span>
+            <input
+              type="text"
+              inputmode="numeric"
+              autocomplete="cc-number"
+              formControlName="cardNumber"
+              [class.invalid]="fieldInvalid('cardNumber')"
+              placeholder="4242 4242 4242 4242"
+              (input)="updateCardNumber($any($event.target).value)"
+            />
+            <strong [attr.data-brand]="cardBrand()">
+              {{ cardBrand() === 'card' ? 'CARD' : cardBrand().toUpperCase() }}
+            </strong>
+            @if (fieldInvalid('cardNumber')) {
+            <small>{{ 'checkout.cardError' | translate }}</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>{{ 'checkout.expiry' | translate }}</span>
+            <input
+              type="text"
+              inputmode="numeric"
+              autocomplete="cc-exp"
+              formControlName="expiry"
+              [class.invalid]="fieldInvalid('expiry')"
+              placeholder="MM/AA"
+              maxlength="5"
+              (input)="updateExpiry($any($event.target).value)"
+            />
+            @if (fieldInvalid('expiry')) {
+            <small>{{ 'checkout.expiryError' | translate }}</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>{{ 'checkout.securityCode' | translate }}</span>
+            <input
+              type="password"
+              inputmode="numeric"
+              autocomplete="cc-csc"
+              formControlName="securityCode"
+              [class.invalid]="fieldInvalid('securityCode')"
+              placeholder="123"
+              maxlength="4"
+              (input)="updateSecurityCode($any($event.target).value)"
+            />
+            @if (fieldInvalid('securityCode')) {
+            <small>{{ 'checkout.securityCodeError' | translate }}</small>
+            }
+          </label>
+        </div>
+
+        @if (paymentError()) {
+        <p class="payment-error" role="alert">
+          {{ 'checkout.paymentError' | translate }}
+        </p>
+        }
+
+        <button
+          class="primary-payment-button"
+          type="submit"
+          [disabled]="processing()"
+        >
+          @if (processing()) {
+          <span class="spinner"></span>
+          {{ 'checkout.processing' | translate }} } @else {
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="4" y="10" width="16" height="11" rx="2" />
+            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+          </svg>
+          {{ 'checkout.pay' | translate }} {{ plan().monthlyPrice |
+          currency:'USD':'symbol':'1.2-2' }} }
+        </button>
+
+        <p class="terms">{{ 'checkout.terms' | translate }}</p>
+      </form>
+      }
+    </div>
+  </section>
+</div>

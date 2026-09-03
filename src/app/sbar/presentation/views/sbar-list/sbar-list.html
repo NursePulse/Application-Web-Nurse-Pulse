@@ -1,0 +1,163 @@
+<div class="view-container">
+  <div class="page-hero">
+    <div>
+      <span class="eyebrow">{{ 'sbar.eyebrow' | translate }}</span>
+      <h2>{{ 'sbar.title' | translate }}</h2>
+      <p>{{ 'sbar.subtitle' | translate }}</p>
+    </div>
+
+    <button class="btn-primary" (click)="openForm()">
+      {{ 'sbar.register' | translate }}
+    </button>
+  </div>
+
+  @if (showForm()) {
+  <div class="card form-card">
+    <div class="form-title">
+      <h3>{{ 'sbar.formTitle' | translate }}</h3>
+      <p>{{ 'sbar.formSubtitle' | translate }}</p>
+    </div>
+
+    @if (errorMessage()) {
+    <div class="form-error">{{ errorMessage() }}</div>
+    }
+
+    <form class="grid-form" (ngSubmit)="save()">
+      <label class="form-field">
+        <span>{{ 'common.patient' | translate }} *</span>
+        <select name="patientId" [(ngModel)]="form.patientId" required>
+          <option value="">{{ 'vitals.selectPatient' | translate }}</option>
+          @for (p of patientStore.patients(); track p.id) {
+          <option [value]="p.id">{{ p.fullName }} - {{ p.roomNumber }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'sbar.receiver' | translate }}</span>
+        <select name="targetNurseId" [(ngModel)]="form.targetNurseId">
+          <option value="2">Enfermero Luis</option>
+          <option value="3">Enfermera Laura</option>
+          <option value="4">Enfermera Claudia</option>
+        </select>
+      </label>
+
+      <label class="form-field span-2">
+        <span>{{ 'sbar.situationField' | translate }}</span>
+        <textarea
+          name="situation"
+          [(ngModel)]="form.situation"
+          [placeholder]="'sbar.placeholder.situation' | translate"
+          required
+        ></textarea>
+      </label>
+
+      <label class="form-field span-2">
+        <span>{{ 'sbar.backgroundField' | translate }}</span>
+        <textarea
+          name="background"
+          [(ngModel)]="form.background"
+          [placeholder]="'sbar.placeholder.background' | translate"
+          required
+        ></textarea>
+      </label>
+
+      <label class="form-field span-2">
+        <span>{{ 'sbar.assessmentField' | translate }}</span>
+        <textarea
+          name="assessment"
+          [(ngModel)]="form.assessment"
+          [placeholder]="'sbar.placeholder.assessment' | translate"
+          required
+        ></textarea>
+      </label>
+
+      <label class="form-field span-2">
+        <span>{{ 'sbar.recommendationField' | translate }}</span>
+        <textarea
+          name="recommendation"
+          [(ngModel)]="form.recommendation"
+          [placeholder]="'sbar.placeholder.recommendation' | translate"
+          required
+        ></textarea>
+      </label>
+
+      <div class="form-actions">
+        <button class="btn-secondary" type="button" (click)="cancelForm()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button class="btn-primary" type="submit">
+          {{ 'sbar.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+  } @for (t of store.transfers(); track t.id) {
+  <div class="card sbar-card">
+    <div class="sbar-header">
+      <span class="patient-tag">{{ t.patientName }}</span>
+      <span class="transfer-meta"
+        >{{ t.sourceNurseName }} → {{ t.targetNurseName }}</span
+      >
+      <span class="status-pill" [class]="'status-' + t.status"
+        >{{ t.statusLabel }}</span
+      >
+      <span class="transfer-date"
+        >{{ t.transferredAt | date:'dd/MM/yyyy h:mm a' }}</span
+      >
+    </div>
+
+    <div class="sbar-grid">
+      <div class="sbar-section">
+        <div class="sbar-letter s">S</div>
+        <div>
+          <strong>{{ 'dashboard.situation' | translate }}</strong>
+          <p>{{ t.situation }}</p>
+        </div>
+      </div>
+
+      <div class="sbar-section">
+        <div class="sbar-letter b">B</div>
+        <div>
+          <strong>{{ 'dashboard.background' | translate }}</strong>
+          <p>{{ t.background }}</p>
+        </div>
+      </div>
+
+      <div class="sbar-section">
+        <div class="sbar-letter a">A</div>
+        <div>
+          <strong>{{ 'dashboard.assessment' | translate }}</strong>
+          <p>{{ t.assessment }}</p>
+        </div>
+      </div>
+
+      <div class="sbar-section">
+        <div class="sbar-letter r">R</div>
+        <div>
+          <strong>{{ 'dashboard.recommendation' | translate }}</strong>
+          <p>{{ t.recommendation }}</p>
+        </div>
+      </div>
+    </div>
+
+    @if (t.additionalNotes) {
+    <div class="handover-notes">
+      <strong>{{ 'sbar.additionalNotes' | translate }}</strong>
+      <p>{{ t.additionalNotes }}</p>
+    </div>
+    } @if (t.canAcknowledge) {
+    <div class="sbar-actions">
+      <button
+        class="btn-secondary"
+        (click)="acknowledge(t.id, t.targetNurseId)"
+      >
+        {{ 'sbar.acknowledge' | translate }}
+      </button>
+    </div>
+    }
+  </div>
+  } @empty {
+  <div class="card empty-state">{{ 'sbar.empty' | translate }}</div>
+  }
+</div>

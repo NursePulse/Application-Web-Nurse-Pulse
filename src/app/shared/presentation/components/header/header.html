@@ -1,0 +1,279 @@
+<header class="app-header">
+  <div class="page-heading">
+    <h1 class="page-title">{{ pageTitle | translate }}</h1>
+    <span class="role-chip">
+      <i></i>
+      {{ modeTitleKey() | translate }}
+    </span>
+  </div>
+  <div class="header-actions">
+    <div class="utility-wrapper" (click)="$event.stopPropagation()">
+      <button
+        class="icon-btn"
+        type="button"
+        [title]="'common.notifications' | translate"
+        (click)="toggleNotifications()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          width="20"
+          height="20"
+        >
+          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 01-3.46 0" />
+        </svg>
+        @if (activeAlerts().length > 0) {
+        <span class="notif-count">{{ activeAlerts().length }}</span>
+        }
+      </button>
+
+      @if (notificationsOpen()) {
+      <div class="floating-overlay" (click)="closeNotifications()"></div>
+      <section class="floating-panel notifications-panel">
+        <div class="panel-header">
+          <div>
+            <strong>{{ 'notifications.panelTitle' | translate }}</strong>
+            <span>
+              {{ activeAlerts().length }} {{ 'notifications.pending' | translate
+              }}
+            </span>
+          </div>
+          <button class="panel-link" type="button" (click)="goTo('/alerts')">
+            {{ 'common.viewAll' | translate }}
+          </button>
+        </div>
+
+        <div class="panel-list">
+          @for (alert of latestAlerts(); track alert.id) {
+          <article
+            class="notification-item"
+            [class.critical]="alert.isCritical"
+          >
+            <div class="alert-icon">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                width="16"
+                height="16"
+              >
+                <path
+                  d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+            <div class="notification-content">
+              <div class="notification-title-row">
+                <strong>{{ alert.patientName }}</strong>
+                <span
+                  class="severity-badge"
+                  [attr.data-severity]="alert.severity"
+                  >{{ alert.severity }}</span
+                >
+              </div>
+              <p>{{ alert.title }}</p>
+              <div class="notification-meta">
+                <small>{{ alert.triggeredAt | date:'short' }}</small>
+                <span>{{ alert.statusLabel }}</span>
+              </div>
+              <div class="notification-actions">
+                @if (alert.status === AlertStatus.OPEN) {
+                <button type="button" (click)="acknowledgeAlert(alert.id)">
+                  {{ 'alerts.acknowledge' | translate }}
+                </button>
+                } @if (canResolveAlerts()) {
+                <button
+                  type="button"
+                  class="resolve"
+                  (click)="resolveAlert(alert.id)"
+                >
+                  {{ 'alerts.resolve' | translate }}
+                </button>
+                }
+              </div>
+            </div>
+          </article>
+          } @empty {
+          <div class="panel-empty">
+            <strong>{{ 'notifications.emptyTitle' | translate }}</strong>
+            <span>{{ 'notifications.emptySubtitle' | translate }}</span>
+          </div>
+          }
+        </div>
+      </section>
+      }
+    </div>
+
+    <app-language-switcher></app-language-switcher>
+
+    <div class="utility-wrapper" (click)="$event.stopPropagation()">
+      <button
+        class="icon-btn"
+        type="button"
+        [title]="'common.help' | translate"
+        (click)="toggleHelp()"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          width="20"
+          height="20"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+      </button>
+
+      @if (helpOpen()) {
+      <div class="floating-overlay" (click)="closeHelp()"></div>
+      <section class="floating-panel help-panel">
+        <div class="panel-header">
+          <div>
+            <strong>{{ 'help.panelTitle' | translate }}</strong>
+            <span>{{ 'help.panelSubtitle' | translate }}</span>
+          </div>
+        </div>
+
+        <div class="help-steps">
+          @if (viewModeStore.isAdmin()) {
+          <button type="button" (click)="goTo('/users')">
+            <span>1</span>
+            <div>
+              <strong>{{ 'help.stepUsersTitle' | translate }}</strong>
+              <small>{{ 'help.stepUsersText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/audit')">
+            <span>2</span>
+            <div>
+              <strong>{{ 'help.stepAuditTitle' | translate }}</strong>
+              <small>{{ 'help.stepAuditText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/reports')">
+            <span>3</span>
+            <div>
+              <strong>{{ 'help.stepReportsTitle' | translate }}</strong>
+              <small>{{ 'help.stepReportsText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/alerts')">
+            <span>4</span>
+            <div>
+              <strong>{{ 'help.stepAlertsTitle' | translate }}</strong>
+              <small>{{ 'help.stepAlertsText' | translate }}</small>
+            </div>
+          </button>
+          } @else if (viewModeStore.isDoctor()) {
+          <button type="button" (click)="goTo('/patients')">
+            <span>1</span>
+            <div>
+              <strong>{{ 'help.stepPatientsTitle' | translate }}</strong>
+              <small>{{ 'help.stepPatientsText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/clinical-events')">
+            <span>2</span>
+            <div>
+              <strong>{{ 'help.stepEventsTitle' | translate }}</strong>
+              <small>{{ 'help.stepEventsText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/alerts')">
+            <span>3</span>
+            <div>
+              <strong>{{ 'help.stepAlertsTitle' | translate }}</strong>
+              <small>{{ 'help.stepAlertsText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/reports')">
+            <span>4</span>
+            <div>
+              <strong>{{ 'help.stepReportsTitle' | translate }}</strong>
+              <small>{{ 'help.stepReportsText' | translate }}</small>
+            </div>
+          </button>
+          } @else {
+          <button type="button" (click)="goTo('/patients')">
+            <span>1</span>
+            <div>
+              <strong>{{ 'help.stepPatientsTitle' | translate }}</strong>
+              <small>{{ 'help.stepPatientsText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/vital-signs')">
+            <span>2</span>
+            <div>
+              <strong>{{ 'help.stepVitalsTitle' | translate }}</strong>
+              <small>{{ 'help.stepVitalsText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/sbar')">
+            <span>3</span>
+            <div>
+              <strong>{{ 'help.stepSbarTitle' | translate }}</strong>
+              <small>{{ 'help.stepSbarText' | translate }}</small>
+            </div>
+          </button>
+          <button type="button" (click)="goTo('/alerts')">
+            <span>4</span>
+            <div>
+              <strong>{{ 'help.stepAlertsTitle' | translate }}</strong>
+              <small>{{ 'help.stepAlertsText' | translate }}</small>
+            </div>
+          </button>
+          }
+        </div>
+      </section>
+      }
+    </div>
+
+    <div class="mode-wrapper" (click)="$event.stopPropagation()">
+      <button
+        class="operator-chip"
+        type="button"
+        [title]="'access.accountMenu' | translate"
+        (click)="toggleModeMenu()"
+      >
+        <span>{{ modeInitials() }}</span>
+        <strong>{{ username() }}</strong>
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="14"
+          height="14"
+          [class.rotate]="modeOpen()"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+
+      @if (modeOpen()) {
+      <div class="floating-overlay" (click)="closeModeMenu()"></div>
+      <section class="floating-panel mode-panel">
+        <div class="panel-header">
+          <div>
+            <strong>{{ username() }}</strong>
+            <span>{{ modeTitleKey() | translate }}</span>
+          </div>
+        </div>
+
+        <button class="access-link" type="button" (click)="signOut()">
+          {{ 'access.signOut' | translate }}
+        </button>
+      </section>
+      }
+    </div>
+  </div>
+</header>

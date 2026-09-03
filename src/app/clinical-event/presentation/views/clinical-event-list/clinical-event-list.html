@@ -1,0 +1,122 @@
+﻿<div class="view-container">
+  <div class="page-hero">
+    <div>
+      <span class="eyebrow">{{ 'events.eyebrow' | translate }}</span>
+      <h2>{{ 'events.title' | translate }}</h2>
+      <p>{{ 'events.subtitle' | translate }}</p>
+    </div>
+    <button class="btn-primary" (click)="showForm.set(true)">
+      {{ 'events.register' | translate }}
+    </button>
+  </div>
+  @if (store.errorKey()) {
+  <div class="form-error" role="alert">{{ store.errorKey()! | translate }}</div>
+  } @if (showForm()) {
+  <div class="card form-card">
+    <div class="form-title">
+      <h3>{{ 'events.formTitle' | translate }}</h3>
+      <p>{{ 'events.formSubtitle' | translate }}</p>
+    </div>
+    @if (errorMessage()) {
+    <div class="form-error">{{ errorMessage() }}</div>
+    }
+    <form class="grid-form" (ngSubmit)="save()">
+      <label class="form-field"
+        ><span>{{ 'common.patient' | translate }} *</span
+        ><select name="patientId" [(ngModel)]="form.patientId" required>
+          <option value="">{{ 'vitals.selectPatient' | translate }}</option>
+          @for (p of patientStore.patients(); track p.id) {
+          <option [value]="p.id">{{ p.fullName }}</option>
+          }
+        </select></label
+      >
+      <label class="form-field"
+        ><span>{{ 'events.type' | translate }}</span
+        ><select name="eventType" [(ngModel)]="form.eventType">
+          @for (t of eventTypes; track t) {
+          <option [value]="t">{{ t }}</option>
+          }
+        </select></label
+      >
+      <label class="form-field"
+        ><span>{{ 'common.severity' | translate }} *</span
+        ><select name="severity" [(ngModel)]="form.severity">
+          @for (s of severities; track s) {
+          <option [value]="s">{{ s }}</option>
+          }
+        </select></label
+      >
+      <label class="form-field"
+        ><span>{{ 'events.titleField' | translate }}</span
+        ><input
+          name="title"
+          [(ngModel)]="form.title"
+          placeholder="Ej. Saturación baja durante monitoreo"
+          required
+      /></label>
+      <label class="form-field span-2"
+        ><span>{{ 'events.description' | translate }}</span
+        ><textarea
+          name="description"
+          [(ngModel)]="form.description"
+          placeholder="Describe qué ocurrió, condición del paciente y acción tomada"
+          required
+        ></textarea>
+      </label>
+      <div class="form-help">{{ 'events.formHelp' | translate }}</div>
+      <div class="form-actions">
+        <button
+          class="btn-secondary"
+          type="button"
+          (click)="showForm.set(false)"
+        >
+          {{ 'common.cancel' | translate }}</button
+        ><button class="btn-primary" type="submit">
+          {{ 'events.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+  <div class="card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'common.patient' | translate }}</th>
+          <th>{{ 'common.type' | translate }}</th>
+          <th>{{ 'common.severity' | translate }}</th>
+          <th>{{ 'common.title' | translate }}</th>
+          <th>{{ 'common.description' | translate }}</th>
+          <th>{{ 'common.responsible' | translate }}</th>
+          <th>{{ 'common.date' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (e of store.events(); track e.id) {
+        <tr>
+          <td class="name-cell">
+            <div class="avatar-sm"></div>
+            {{ e.patientName }}
+          </td>
+          <td><span class="type-badge">{{ e.eventType }}</span></td>
+          <td>
+            <span class="sev-badge" [class]="'sev-' + e.severity"
+              >{{ e.severity }}</span
+            >
+          </td>
+          <td class="fw500">{{ e.title }}</td>
+          <td class="desc">{{ e.description }}</td>
+          <td>{{ e.nurseName }}</td>
+          <td>{{ e.occurredAt | date:'dd/MM/yyyy h:mm a' }}</td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="7">
+            <div class="empty-state">{{ 'events.empty' | translate }}</div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

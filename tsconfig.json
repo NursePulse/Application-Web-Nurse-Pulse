@@ -1,0 +1,48 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "baseUrl": "./",
+    "paths": {
+      "@shared/*": ["src/app/shared/*"],
+      "@iam/*": ["src/app/iam/*"],
+      "@subscriptions/*": ["src/app/subscriptions/*"],
+      "@dashboard/*": ["src/app/dashboard/*"],
+      "@patient/*": ["src/app/patient/*"],
+      "@vital-sign/*": ["src/app/vital-sign/*"],
+      "@clinical-event/*": ["src/app/clinical-event/*"],
+      "@sbar/*": ["src/app/sbar/*"],
+      "@notification/*": ["src/app/notification/*"],
+      "@report/*": ["src/app/report/*"],
+      "@audit/*": ["src/app/audit/*"],
+      "@environments/*": ["src/environments/*"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

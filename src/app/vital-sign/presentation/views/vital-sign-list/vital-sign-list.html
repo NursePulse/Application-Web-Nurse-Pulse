@@ -1,0 +1,161 @@
+<div class="view-container">
+  <div class="view-header">
+    <h2>{{ 'vitals.title' | translate }}</h2>
+    <button class="btn-primary" (click)="openForm()">
+      + {{ 'vitals.register' | translate }}
+    </button>
+  </div>
+
+  @if (showForm()) {
+  <div class="card form-card">
+    <div class="form-title">
+      <h3>{{ 'vitals.register' | translate }}</h3>
+      <p>{{ 'vitals.formSubtitle' | translate }}</p>
+    </div>
+
+    @if (errorMessage()) {
+    <div class="form-error">{{ errorMessage() }}</div>
+    }
+
+    <form class="grid-form" (ngSubmit)="save()">
+      <label class="form-field">
+        <span>{{ 'common.patient' | translate }}</span>
+        <select name="patientId" [(ngModel)]="form.patientId" required>
+          <option value="">{{ 'vitals.selectPatient' | translate }}</option>
+          @for (p of patientStore.patients(); track p.id) {
+          <option [value]="p.id">{{ p.fullName }} - {{ p.roomNumber }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'vitals.hr' | translate }}</span>
+        <input
+          name="heartRate"
+          type="number"
+          [(ngModel)]="form.heartRate"
+          placeholder="Ej. 72"
+          required
+        />
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'vitals.rr' | translate }}</span>
+        <input
+          name="respiratoryRate"
+          type="number"
+          [(ngModel)]="form.respiratoryRate"
+          placeholder="Ej. 14"
+          required
+        />
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'vitals.systolic' | translate }}</span>
+        <input
+          name="systolic"
+          type="number"
+          [(ngModel)]="form.systolic"
+          placeholder="Ej. 115"
+          required
+        />
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'vitals.diastolic' | translate }}</span>
+        <input
+          name="diastolic"
+          type="number"
+          [(ngModel)]="form.diastolic"
+          placeholder="Ej. 75"
+          required
+        />
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'vitals.spo2' | translate }}</span>
+        <input
+          name="oxygenSaturation"
+          type="number"
+          [(ngModel)]="form.oxygenSaturation"
+          placeholder="Ej. 98"
+          required
+        />
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'vitals.temperature' | translate }}</span>
+        <input
+          name="temperature"
+          type="number"
+          step="0.1"
+          [(ngModel)]="form.temperature"
+          placeholder="Ej. 36.5"
+          required
+        />
+      </label>
+
+      <div class="form-help">
+        <strong>{{ 'vitals.note' | translate }}</strong> {{ 'vitals.help' |
+        translate }}
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-secondary" type="button" (click)="cancelForm()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button class="btn-primary" type="submit">
+          {{ 'common.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+
+  <div class="card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'common.patient' | translate }}</th>
+          <th>FC (bpm)</th>
+          <th>FR (rpm)</th>
+          <th>TA (mmHg)</th>
+          <th>SatO₂ (%)</th>
+          <th>Temp (°C)</th>
+          <th>{{ 'dashboard.risk' | translate }}</th>
+          <th>{{ 'vitals.registered' | translate }}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (vs of store.vitalSigns(); track vs.id) {
+        <tr>
+          <td class="name-cell">
+            <div class="avatar-sm"></div>
+            {{ vs.patientName }}
+          </td>
+          <td><span class="mono">{{ vs.heartRate }}</span></td>
+          <td><span class="mono">{{ vs.respiratoryRate }}</span></td>
+          <td>
+            <span class="mono">{{ vs.systolic }}/{{ vs.diastolic }}</span>
+          </td>
+          <td><span class="mono">{{ vs.oxygenSaturation }}</span></td>
+          <td><span class="mono">{{ vs.temperature }}</span></td>
+          <td>
+            <span class="risk-badge" [class]="'risk-badge risk-' + vs.riskLevel"
+              >{{ vs.riskLabel }}</span
+            >
+          </td>
+          <td>{{ vs.recordedAt | date:'dd/MM/yyyy h:mm a' }}</td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="8">
+            <div class="empty-state">{{ 'vitals.empty' | translate }}</div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

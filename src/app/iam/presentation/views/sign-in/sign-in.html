@@ -1,0 +1,179 @@
+<main class="access-page">
+  <section class="access-panel">
+    <div class="access-topbar">
+      <div class="brand-mark">
+        <svg viewBox="0 0 32 32" fill="none">
+          <rect
+            x="4"
+            y="4"
+            width="24"
+            height="24"
+            rx="4"
+            stroke="currentColor"
+            stroke-width="2"
+          />
+          <path
+            d="M9 18L14 13L18 17L23 12"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+
+      <app-language-switcher></app-language-switcher>
+    </div>
+
+    <div class="access-copy">
+      <span>{{ 'access.eyebrow' | translate }}</span>
+      <h1>{{ 'access.title' | translate }}</h1>
+      <p>{{ 'access.subtitle' | translate }}</p>
+    </div>
+
+    <form class="access-form" (ngSubmit)="submit()">
+      <label class="form-field">
+        <span>{{ 'access.username' | translate }}</span>
+        <input
+          type="text"
+          name="username"
+          [(ngModel)]="username"
+          [placeholder]="'access.usernamePlaceholder' | translate"
+          autocomplete="username"
+        />
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'access.password' | translate }}</span>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          [placeholder]="'access.passwordPlaceholder' | translate"
+          autocomplete="current-password"
+        />
+      </label>
+
+      @if (errorKey()) {
+      <p class="access-error" role="alert">{{ errorKey()! | translate }}</p>
+      }
+
+      <button
+        class="access-submit"
+        type="submit"
+        [disabled]="authStore.loading()"
+      >
+        @if (authStore.loading()) {
+        <span class="submit-spinner" aria-hidden="true"></span>
+        {{ 'access.signingIn' | translate }}
+        } @else {
+        {{ 'access.signIn' | translate }}
+        }
+      </button>
+
+      <p class="access-alt">
+        {{ 'access.noAccount' | translate }}
+        <a routerLink="/sign-up">{{ 'access.createAccount' | translate }}</a>
+      </p>
+    </form>
+  </section>
+
+  <aside class="access-preview">
+    <span class="preview-orb orb-a" aria-hidden="true"></span>
+    <span class="preview-orb orb-b" aria-hidden="true"></span>
+    <span class="preview-scanline" aria-hidden="true"></span>
+
+    <div class="preview-chip">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        width="14"
+        height="14"
+        aria-hidden="true"
+      >
+        <path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 00-3-3.87" />
+        <path d="M16 3.13a4 4 0 010 7.75" />
+      </svg>
+      <span>{{ 'access.preview.monitored' | translate }}</span>
+    </div>
+
+    <div class="preview-card">
+      <div class="preview-top">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <strong>PulseReport</strong>
+        <span class="preview-live">{{ 'access.preview.live' | translate }}</span>
+      </div>
+
+      <div class="preview-patient">
+        <span class="patient-avatar">MQ</span>
+        <div class="patient-meta">
+          <strong>María Quispe</strong>
+          <small>{{ 'access.preview.bed' | translate }} 12B · UCI</small>
+        </div>
+        <span class="patient-chip">
+          {{ 'access.preview.stable' | translate }}
+        </span>
+      </div>
+
+      <div class="preview-vitals">
+        <div class="vital-tile heart">
+          <small>{{ 'access.preview.heartRate' | translate }}</small>
+          <strong>
+            78
+            <svg
+              class="heart-icon"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              width="13"
+              height="13"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+              />
+            </svg>
+          </strong>
+          <span>{{ 'access.preview.bpmUnit' | translate }}</span>
+        </div>
+        <div class="vital-tile oxygen">
+          <small>SpO₂</small>
+          <strong>98</strong>
+          <span>%</span>
+        </div>
+        <div class="vital-tile temp">
+          <small>{{ 'access.preview.temperature' | translate }}</small>
+          <strong>36.8</strong>
+          <span>°C</span>
+        </div>
+      </div>
+
+      <div class="preview-ecg" aria-hidden="true">
+        <svg viewBox="0 0 320 64" preserveAspectRatio="none">
+          <polyline
+            points="0,32 34,32 44,32 52,18 60,46 68,10 76,50 84,32 118,32 128,32 136,18 144,46 152,10 160,50 168,32 202,32 212,32 220,18 228,46 236,10 244,50 252,32 286,32 320,32"
+          />
+        </svg>
+      </div>
+
+      <div class="preview-alert">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="15"
+          height="15"
+        >
+          <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+          <polyline points="22 4 12 14.01 9 11.01" />
+        </svg>
+        <span>{{ 'access.preview.alertAttended' | translate }}</span>
+        <small>10:42</small>
+      </div>
+    </div>
+  </aside>
+</main>

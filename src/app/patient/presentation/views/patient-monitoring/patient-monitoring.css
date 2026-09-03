@@ -1,0 +1,257 @@
+.view-container {
+  padding: 28px;
+}
+
+.monitoring-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(99, 102, 241, 0.18);
+  border-radius: 24px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.1),
+    rgba(255, 255, 255, 0.96)
+  );
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.05);
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+
+.monitoring-hero h2 {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+}
+
+.monitoring-hero p {
+  margin: 0;
+  color: #64748b;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.summary-card {
+  padding: 18px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.summary-card span {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.summary-card strong {
+  font-size: 1.15rem;
+  color: #0f172a;
+}
+
+.monitoring-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 18px;
+}
+
+.card {
+  padding: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.05);
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.link {
+  color: #0f766e;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.data-table th {
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.risk-LOW {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.risk-MEDIUM {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.risk-HIGH {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.risk-CRITICAL {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.risk-UNASSESSED {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.alert-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.alert-row:last-child {
+  border-bottom: 0;
+}
+
+.alert-row strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.alert-row p {
+  margin: 0 0 6px;
+  color: #475569;
+  font-size: 0.88rem;
+}
+
+.alert-row span {
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+.alert-row.critical {
+  border-left: 4px solid #ef4444;
+  padding-left: 12px;
+}
+
+.alert-meta {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.severity-tag,
+.status-chip {
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: #fee2e2;
+  color: #dc2626;
+  white-space: nowrap;
+}
+
+.status-chip {
+  background: #e6fffb;
+  color: #0f766e;
+}
+
+.diagnosis-box {
+  padding: 18px;
+  border-radius: 14px;
+  background: #f8fafc;
+}
+
+.diagnosis-box p {
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.diagnosis-box span {
+  color: #64748b;
+}
+
+.empty-state {
+  padding: 18px;
+  color: #64748b;
+  text-align: center;
+}
+
+.btn-secondary {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 14px;
+  padding: 11px 16px;
+  background: #fff;
+  color: #0f172a;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+  .summary-grid,
+  .monitoring-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .monitoring-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,44 @@
+<div class="view-container">
+  <div class="page-hero">
+    <div>
+      <span class="eyebrow">{{ 'audit.eyebrow' | translate }}</span>
+      <h2>{{ 'audit.title' | translate }}</h2>
+      <p>{{ 'audit.subtitle' | translate }}</p>
+    </div>
+    <div class="hero-pill">
+      {{ store.logs().length }} {{ 'audit.movements' | translate }}
+    </div>
+  </div>
+
+  <div class="card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'common.code' | translate }}</th>
+          <th>{{ 'common.action' | translate }}</th>
+          <th>{{ 'common.description' | translate }}</th>
+          <th>{{ 'common.user' | translate }}</th>
+          <th>{{ 'audit.dateTime' | translate }}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (log of store.logs(); track log.id) {
+        <tr>
+          <td><span class="audit-code">{{ log.code }}</span></td>
+          <td class="audit-action">{{ log.actionLabel }}</td>
+          <td class="audit-desc">{{ log.description }}</td>
+          <td>{{ log.username }}</td>
+          <td>{{ log.performedAt | date:'dd/MM/yyyy h:mm a' }}</td>
+        </tr>
+        } @empty {
+        <tr>
+          <td colspan="5">
+            <div class="empty-state">{{ 'audit.empty' | translate }}</div>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

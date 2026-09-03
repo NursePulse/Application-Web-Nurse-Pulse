@@ -1,0 +1,213 @@
+.view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.page-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #f0fdfa, #f8fafc);
+  border: 1px solid #99f6e4;
+}
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+.page-hero h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111827;
+  margin: 4px 0;
+}
+.page-hero p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+.hero-pill {
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff;
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid #99f6e4;
+}
+.banner {
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  animation: banner-in 0.25s ease-out;
+}
+.banner.error {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.banner.success {
+  border: 1px solid #a7f3d0;
+  background: #ecfdf5;
+  color: #047857;
+}
+@keyframes banner-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table th {
+  text-align: left;
+  padding: 10px 12px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  border-bottom: 1px solid #e5e7eb;
+}
+.data-table td {
+  padding: 13px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+  vertical-align: middle;
+}
+.data-table tbody tr:hover {
+  background: #f8fafc;
+}
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #14b8a6, #0ea5e9);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.user-meta {
+  display: grid;
+  gap: 1px;
+}
+.user-meta strong {
+  color: #111827;
+  font-size: 13.5px;
+}
+.user-meta small {
+  color: #0f766e;
+  font-size: 11px;
+  font-weight: 700;
+}
+.role-chip {
+  display: inline-block;
+  padding: 4px 11px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 800;
+}
+.role-chip.ROLE_ADMIN {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+.role-chip.ROLE_DOCTOR {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+.role-chip.ROLE_NURSE {
+  background: #d1fae5;
+  color: #047857;
+}
+.role-select {
+  min-width: 150px;
+  padding: 8px 10px;
+  border: 1px solid #dce7f0;
+  border-radius: 10px;
+  background: #fff;
+  color: #1e293b;
+  font-size: 13px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.role-select:focus {
+  outline: none;
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+}
+.role-select:disabled {
+  background: #f8fafc;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+.action-cell {
+  text-align: right;
+}
+.apply-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0f766e, #0d9488);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+.apply-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(15, 118, 110, 0.26);
+}
+.apply-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.self-hint {
+  color: #94a3b8;
+  font-size: 12px;
+}
+.empty-state {
+  text-align: center;
+  color: #94a3b8;
+  padding: 32px;
+}
+@media (max-width: 900px) {
+  .page-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .data-table {
+    display: block;
+    overflow: auto;
+  }
+}

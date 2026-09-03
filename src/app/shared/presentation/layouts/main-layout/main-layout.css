@@ -1,0 +1,60 @@
+.layout-wrapper {
+  --role-accent: #0f766e;
+  --role-accent-strong: #115e59;
+  --role-soft: #ecfdf5;
+  --role-border: #a7f3d0;
+  display: flex;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 82% 2%, var(--role-soft) 0, transparent 28rem),
+    #f5f8fb;
+}
+.layout-wrapper.admin-view {
+  --role-accent: #2563eb;
+  --role-accent-strong: #1d4ed8;
+  --role-soft: #eff6ff;
+  --role-border: #bfdbfe;
+}
+.layout-wrapper.doctor-view {
+  --role-accent: #4f46e5;
+  --role-accent-strong: #4338ca;
+  --role-soft: #eef2ff;
+  --role-border: #c7d2fe;
+}
+.layout-main {
+  flex: 1;
+  margin-left: 220px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+}
+.layout-content {
+  flex: 1;
+  padding: 24px 32px 32px;
+  overflow-y: auto;
+}
+.layout-footer {
+  padding: 14px 32px;
+  text-align: center;
+  font-size: 12px;
+  color: #8aa0b8;
+  border-top: 1px solid #dde6ef;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+@media (max-width: 900px) {
+  .layout-wrapper {
+    flex-direction: column;
+  }
+  .layout-main {
+    margin-left: 0;
+    padding-top: 0;
+  }
+  .layout-content {
+    padding: 16px;
+  }
+  .layout-footer {
+    padding: 12px 16px 88px;
+  }
+}

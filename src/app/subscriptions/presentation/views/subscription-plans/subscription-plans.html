@@ -1,0 +1,98 @@
+<section class="subscriptions-page">
+  <header class="subscriptions-intro">
+    <span class="intro-eyebrow">{{ 'subscriptions.eyebrow' | translate }}</span>
+    <h2>{{ 'subscriptions.title' | translate }}</h2>
+    <p>{{ 'subscriptions.subtitle' | translate }}</p>
+  </header>
+
+  @if (activatedPlan(); as plan) {
+  <div class="activation-banner" role="status">
+    <span>
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m5 12 4 4L19 6" />
+      </svg>
+    </span>
+    <div>
+      <strong>{{ 'subscriptions.activationTitle' | translate }}</strong>
+      <p>
+        {{ plan.nameKey | translate }} · {{ 'subscriptions.activationText' |
+        translate }}
+      </p>
+    </div>
+    <button
+      type="button"
+      [attr.aria-label]="'common.close' | translate"
+      (click)="activatedPlan.set(null)"
+    >
+      &times;
+    </button>
+  </div>
+  }
+
+  <div class="plan-grid">
+    @for (plan of subscriptionStore.plans(); track plan.id) {
+    <article
+      class="plan-card"
+      [class.highlighted]="plan.highlighted"
+      [class.current]="plan.id === subscriptionStore.currentPlanId()"
+    >
+      @if (plan.highlighted) {
+      <span class="plan-badge">{{ 'subscriptions.popular' | translate }}</span>
+      }
+
+      <h3>{{ plan.nameKey | translate }}</h3>
+      <p class="plan-description">{{ plan.descriptionKey | translate }}</p>
+
+      <div class="plan-price">
+        @if (plan.monthlyPrice === 0) {
+        <strong>{{ 'subscriptions.free' | translate }}</strong>
+        } @else {
+        <strong>${{ plan.monthlyPrice }}</strong>
+        <span>{{ 'subscriptions.perMonth' | translate }}</span>
+        }
+      </div>
+
+      <p class="plan-seats">
+        {{ 'subscriptions.upTo' | translate }} {{ plan.maxSeats }} {{
+        'subscriptions.seats' | translate }}
+      </p>
+
+      <ul class="plan-features">
+        @for (featureKey of plan.featureKeys; track featureKey) {
+        <li>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            width="15"
+            height="15"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+          {{ featureKey | translate }}
+        </li>
+        }
+      </ul>
+
+      @if (plan.id === subscriptionStore.currentPlanId()) {
+      <button class="plan-action current" type="button" disabled>
+        {{ 'subscriptions.currentPlan' | translate }}
+      </button>
+      } @else {
+      <button class="plan-action" type="button" (click)="choosePlan(plan)">
+        {{ 'subscriptions.choosePlan' | translate }}
+      </button>
+      }
+    </article>
+    }
+  </div>
+</section>
+
+@if (selectedPlan(); as plan) {
+<app-payment-checkout
+  [plan]="plan"
+  (closed)="closeCheckout()"
+  (completed)="completePayment($event)"
+/>
+}

@@ -1,0 +1,138 @@
+<div class="view-container">
+  @if (patient(); as p) {
+  <div class="monitoring-hero">
+    <div>
+      <span class="eyebrow">{{ 'monitoring.eyebrow' | translate }}</span>
+      <h2>{{ p.fullName }}</h2>
+      <p>
+        ID: {{ p.code }} / DNI: {{ p.documentNumber }} / {{ p.age }} años /
+        Habitación {{ p.roomNumber }} / Cama {{ p.bedNumber }}
+      </p>
+    </div>
+
+    <button class="btn-secondary" (click)="goBack()">
+      {{ 'monitoring.back' | translate }}
+    </button>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <span>{{ 'common.status' | translate }}</span>
+      <strong>{{ p.statusLabel }}</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>{{ 'patients.room' | translate }}</span>
+      <strong>{{ p.roomNumber }} / {{ p.bedNumber }}</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>{{ 'monitoring.activeAlerts' | translate }}</span>
+      <strong>{{ activeAlerts().length }}</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>{{ 'monitoring.lastRisk' | translate }}</span>
+      <strong>{{ lastVital()?.riskLabel ?? '-' }}</strong>
+    </div>
+  </div>
+
+  <div class="monitoring-grid">
+    <section class="card">
+      <div class="card-header">
+        <h3>{{ 'monitoring.vitalsHistory' | translate }}</h3>
+        <a routerLink="/vital-signs" class="link"
+          >{{ 'vitals.register' | translate }}</a
+        >
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>FC</th>
+            <th>FR</th>
+            <th>TA</th>
+            <th>SatO₂</th>
+            <th>Temp</th>
+            <th>{{ 'dashboard.risk' | translate }}</th>
+            <th>{{ 'vitals.registered' | translate }}</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (vs of patientVitals(); track vs.id) {
+          <tr>
+            <td>{{ vs.heartRate }}</td>
+            <td>{{ vs.respiratoryRate }}</td>
+            <td>{{ vs.systolic }}/{{ vs.diastolic }}</td>
+            <td>{{ vs.oxygenSaturation }}%</td>
+            <td>{{ vs.temperature }} °C</td>
+            <td>
+              <span
+                class="risk-badge"
+                [class]="'risk-badge risk-' + vs.riskLevel"
+              >
+                {{ vs.riskLabel }}
+              </span>
+            </td>
+            <td>{{ vs.recordedAt | date:'dd/MM/yyyy h:mm a' }}</td>
+          </tr>
+          } @empty {
+          <tr>
+            <td colspan="7">
+              <div class="empty-state">
+                {{ 'monitoring.noVitals' | translate }}
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card alerts-panel">
+      <div class="card-header">
+        <h3>{{ 'alerts.title' | translate }}</h3>
+        <a routerLink="/alerts" class="link"
+          >{{ 'common.seeAll' | translate }}</a
+        >
+      </div>
+
+      @for (alert of patientAlerts(); track alert.id) {
+      <div class="alert-row" [class.critical]="alert.isCritical">
+        <div>
+          <strong>{{ alert.title }}</strong>
+          <p>{{ alert.message }}</p>
+          <span>{{ alert.triggeredAt | date:'dd/MM/yyyy h:mm a' }}</span>
+        </div>
+
+        <div class="alert-meta">
+          <span class="severity-tag">{{ alert.severityLabel }}</span>
+          <span class="status-chip">{{ alert.statusLabel }}</span>
+        </div>
+      </div>
+      } @empty {
+      <div class="empty-state">{{ 'monitoring.noAlerts' | translate }}</div>
+      }
+    </section>
+
+    <section class="card full-width">
+      <div class="card-header">
+        <h3>{{ 'patients.diagnosis' | translate }}</h3>
+      </div>
+
+      <div class="diagnosis-box">
+        <p>{{ p.diagnosis }}</p>
+        <span
+          >{{ 'patients.attendingPhysician' | translate }}: {{
+          p.attendingPhysician }}</span
+        >
+      </div>
+    </section>
+  </div>
+  } @else {
+  <div class="card empty-state">
+    {{ 'monitoring.patientNotFound' | translate }}
+  </div>
+  }
+</div>

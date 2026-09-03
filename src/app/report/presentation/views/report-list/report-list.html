@@ -1,0 +1,332 @@
+<div class="view-container">
+  <div class="page-hero">
+    <div>
+      <span class="eyebrow">{{ 'reports.eyebrow' | translate }}</span>
+      <h2>{{ 'reports.title' | translate }}</h2>
+      <p>{{ 'reports.backendSubtitle' | translate }}</p>
+    </div>
+    <button class="btn-primary" (click)="openForm()">
+      {{ 'reports.generate' | translate }}
+    </button>
+  </div>
+
+  @if (showForm()) {
+  <div class="card form-card">
+    <div class="form-title">
+      <h3>{{ 'reports.formTitle' | translate }}</h3>
+      <p>{{ 'reports.formSubtitle' | translate }}</p>
+    </div>
+
+    @if (errorMessage()) {
+    <div class="form-error">{{ errorMessage() }}</div>
+    }
+
+    <form class="grid-form" (ngSubmit)="save()">
+      <label class="form-field">
+        <span>{{ 'reports.type' | translate }}</span>
+        <select name="type" [(ngModel)]="form.type">
+          @for (t of types; track t) {
+          <option [value]="t">{{ t }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="form-field span-2">
+        <span>{{ 'reports.titleField' | translate }}</span>
+        <input
+          name="title"
+          [(ngModel)]="form.title"
+          [placeholder]="'reports.titlePlaceholder' | translate"
+          required
+        />
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'reports.startDate' | translate }}</span>
+        <input
+          name="startDate"
+          [(ngModel)]="form.startDate"
+          type="date"
+          required
+        />
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'reports.endDate' | translate }}</span>
+        <input name="endDate" [(ngModel)]="form.endDate" type="date" required />
+      </label>
+
+      <div class="form-help">{{ 'reports.backendHelp' | translate }}</div>
+
+      <div class="form-actions">
+        <button
+          class="btn-secondary"
+          type="button"
+          (click)="showForm.set(false)"
+        >
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button class="btn-primary" type="submit">
+          {{ 'reports.generateTransaction' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+
+  <div class="reports-grid">
+    @for (r of store.reports(); track r.id) {
+    <div class="report-card">
+      <div class="report-header">
+        <span class="type-badge">{{ r.type }}</span>
+        <span class="status-tag" [class]="'st-' + r.status"
+          >{{ r.status }}</span
+        >
+      </div>
+
+      <h3>{{ r.title }}</h3>
+      <p class="muted">
+        {{ 'reports.generatedBy' | translate }} {{ r.generatedBy }} / {{
+        r.createdAt | date:'dd/MM/yyyy h:mm a' }}
+      </p>
+
+      @if (r.summary) {
+      <div class="summary-grid">
+        <div>
+          <strong>{{ r.summary.patients }}</strong
+          ><span>{{ 'common.patients' | translate }}</span>
+        </div>
+        <div>
+          <strong>{{ r.summary.vitalSigns }}</strong
+          ><span>{{ 'reports.vitals' | translate }}</span>
+        </div>
+        <div>
+          <strong>{{ r.summary.clinicalEvents }}</strong
+          ><span>{{ 'events.title' | translate }}</span>
+        </div>
+        <div>
+          <strong>{{ r.summary.sbarTransfers }}</strong><span>SBAR</span>
+        </div>
+        <div>
+          <strong>{{ r.summary.activeAlerts }}</strong
+          ><span>{{ 'common.alerts' | translate }}</span>
+        </div>
+        <div>
+          <strong>{{ r.summary.auditLogs }}</strong
+          ><span>{{ 'common.audit' | translate }}</span>
+        </div>
+      </div>
+      }
+
+      <div class="conclusion">
+        <strong>{{ 'reports.conclusion' | translate }}</strong>
+        {{ r.clinicalConclusion || ('reports.noConclusion' | translate) }}
+      </div>
+
+      <button class="btn-sm" (click)="openDetail(r)">
+        {{ 'reports.viewDetail' | translate }}
+      </button>
+    </div>
+    } @empty {
+    <div class="card empty-state">{{ 'reports.empty' | translate }}</div>
+    }
+  </div>
+</div>
+
+@if (selectedReport(); as report) {
+<div class="report-detail-backdrop" (click)="closeDetail()">
+  <section
+    class="report-detail"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="report.title"
+    (click)="$event.stopPropagation()"
+  >
+    <header class="detail-header">
+      <div class="detail-brand">
+        <span class="detail-mark">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 3h7l4 4v14H7z" />
+            <path d="M14 3v5h5M10 12h5M10 16h5" />
+          </svg>
+        </span>
+        <div>
+          <span>{{ 'reports.detail.eyebrow' | translate }}</span>
+          <strong>PulseReport</strong>
+        </div>
+      </div>
+
+      <div class="detail-status">
+        <span></span>
+        {{ report.status }}
+      </div>
+
+      <button
+        class="detail-close"
+        type="button"
+        [attr.aria-label]="'common.close' | translate"
+        (click)="closeDetail()"
+      >
+        &times;
+      </button>
+    </header>
+
+    <div class="detail-title">
+      <div>
+        <span class="type-badge">{{ report.type }}</span>
+        <h2>{{ report.title }}</h2>
+        <p>
+          {{ 'reports.generatedBy' | translate }} {{ report.generatedBy }} · {{
+          report.createdAt | date:'dd/MM/yyyy, h:mm a' }}
+        </p>
+      </div>
+      <div class="period-chip">
+        <span>{{ 'reports.detail.period' | translate }}</span>
+        <strong>
+          {{ report.startDate | date:'dd MMM yyyy' }} — {{ report.endDate |
+          date:'dd MMM yyyy' }}
+        </strong>
+      </div>
+    </div>
+
+    @if (report.summary; as summary) {
+    <div class="detail-body">
+      <aside class="clinical-reading" [attr.data-tone]="reportTone(report)">
+        <span class="reading-label">
+          {{ 'reports.detail.clinicalReading' | translate }}
+        </span>
+        <div class="reading-icon">
+          @if (reportTone(report) === 'critical') {
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 9v4M12 17h.01" />
+            <path
+              d="m10.3 3.9-8.4 14a2 2 0 0 0 1.7 3h16.8a2 2 0 0 0 1.7-3l-8.4-14a2 2 0 0 0-3.4 0Z"
+            />
+          </svg>
+          } @else {
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m5 12 4 4L19 6" />
+            <circle cx="12" cy="12" r="10" />
+          </svg>
+          }
+        </div>
+        <strong>{{ reportToneKey(report) | translate }}</strong>
+        <p>
+          {{ report.clinicalConclusion || ('reports.noConclusion' | translate)
+          }}
+        </p>
+
+        <div class="activity-total">
+          <span>{{ 'reports.detail.activity' | translate }}</span>
+          <strong>{{ activityTotal(summary) }}</strong>
+          <small>{{ 'reports.detail.records' | translate }}</small>
+        </div>
+      </aside>
+
+      <main class="detail-content">
+        <div class="section-heading">
+          <div>
+            <span>{{ 'reports.detail.overview' | translate }}</span>
+            <h3>{{ 'reports.detail.indicators' | translate }}</h3>
+          </div>
+          <span class="data-source">
+            {{ 'reports.detail.consolidatedData' | translate }}
+          </span>
+        </div>
+
+        <div class="detail-metrics">
+          <div>
+            <span>{{ 'common.patients' | translate }}</span>
+            <strong>{{ summary.patients }}</strong>
+            <small>{{ 'reports.detail.included' | translate }}</small>
+          </div>
+          <div>
+            <span>{{ 'reports.vitals' | translate }}</span>
+            <strong>{{ summary.vitalSigns }}</strong>
+            <small>{{ 'reports.detail.records' | translate }}</small>
+          </div>
+          <div>
+            <span>{{ 'events.title' | translate }}</span>
+            <strong>{{ summary.clinicalEvents }}</strong>
+            <small>{{ 'reports.detail.records' | translate }}</small>
+          </div>
+          <div>
+            <span>SBAR</span>
+            <strong>{{ summary.sbarTransfers }}</strong>
+            <small>{{ 'reports.detail.handoffs' | translate }}</small>
+          </div>
+          <div class="metric-alert">
+            <span>{{ 'reports.detail.activeAlerts' | translate }}</span>
+            <strong>{{ summary.activeAlerts }}</strong>
+            <small>{{ 'reports.detail.pendingReview' | translate }}</small>
+          </div>
+          <div class="metric-critical">
+            <span>{{ 'reports.detail.criticalAlerts' | translate }}</span>
+            <strong>{{ summary.criticalAlerts }}</strong>
+            <small>{{ 'reports.detail.priority' | translate }}</small>
+          </div>
+          <div>
+            <span>{{ 'common.audit' | translate }}</span>
+            <strong>{{ summary.auditLogs }}</strong>
+            <small>{{ 'reports.detail.movements' | translate }}</small>
+          </div>
+        </div>
+
+        <section class="detail-findings">
+          <div class="finding-heading">
+            <span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 11l3 3L22 4" />
+                <path
+                  d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"
+                />
+              </svg>
+            </span>
+            <div>
+              <strong>{{ 'reports.detail.findings' | translate }}</strong>
+              <small
+                >{{ 'reports.detail.automaticAnalysis' | translate }}</small
+              >
+            </div>
+          </div>
+
+          <ul>
+            @if (summary.criticalAlerts > 0) {
+            <li class="finding-critical">
+              <span></span>
+              {{ 'reports.detail.criticalFinding' | translate }}
+            </li>
+            } @else if (summary.activeAlerts > 0) {
+            <li class="finding-attention">
+              <span></span>
+              {{ 'reports.detail.attentionFinding' | translate }}
+            </li>
+            } @else {
+            <li>
+              <span></span>
+              {{ 'reports.detail.stableFinding' | translate }}
+            </li>
+            }
+            <li>
+              <span></span>
+              {{ 'reports.detail.traceabilityFinding' | translate }}
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+    }
+
+    <footer class="detail-footer">
+      <div>
+        <span>{{ 'reports.detail.reportId' | translate }}</span>
+        <strong>{{ report.id }}</strong>
+      </div>
+      <p>{{ 'reports.detail.confidential' | translate }}</p>
+      <button type="button" (click)="closeDetail()">
+        {{ 'common.close' | translate }}
+      </button>
+    </footer>
+  </section>
+</div>
+}

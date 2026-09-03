@@ -1,0 +1,219 @@
+<div class="view-container">
+  <div class="page-hero">
+    <div>
+      <span class="eyebrow">{{ 'alerts.eyebrow' | translate }}</span>
+      <h2>{{ 'alerts.title' | translate }}</h2>
+      <p>{{ 'alerts.subtitle' | translate }}</p>
+    </div>
+
+    <div class="hero-actions">
+      <div class="hero-pill">
+        {{ activeCount() }} {{ 'alerts.pending' | translate }}
+      </div>
+      <button class="btn-primary" (click)="openCreateForm()">
+        {{ 'alerts.new' | translate }}
+      </button>
+    </div>
+  </div>
+
+  @if (store.actionErrorKey()) {
+  <div class="action-error" role="alert">
+    <span>{{ store.actionErrorKey()! | translate }}</span>
+    <button
+      type="button"
+      [attr.aria-label]="'common.close' | translate"
+      (click)="store.clearActionError()"
+    >
+      &times;
+    </button>
+  </div>
+  } @if (showForm()) {
+  <div class="card create-alert-card">
+    <div class="form-title">
+      <h3>{{ 'alerts.formTitle' | translate }}</h3>
+      <p>{{ 'alerts.formSubtitle' | translate }}</p>
+    </div>
+
+    @if (errorMessage()) {
+    <div class="form-error">{{ errorMessage() }}</div>
+    }
+
+    <form class="alert-form-grid" (ngSubmit)="saveAlert()">
+      <label class="form-field">
+        <span>{{ 'common.patient' | translate }}</span>
+        <select name="patientId" [(ngModel)]="form.patientId" required>
+          <option value="">{{ 'alerts.selectPatient' | translate }}</option>
+          @for (patient of patientStore.patients(); track patient.id) {
+          <option [value]="patient.id">
+            {{ patient.fullName }} - {{ patient.roomNumber }}
+          </option>
+          }
+        </select>
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'common.type' | translate }}</span>
+        <select name="type" [(ngModel)]="form.type">
+          <option [value]="AlertType.CARDIAC">
+            {{ 'alerts.type.cardiac' | translate }}
+          </option>
+          <option [value]="AlertType.RESPIRATORY">
+            {{ 'alerts.type.respiratory' | translate }}
+          </option>
+          <option [value]="AlertType.NEUROLOGICAL">
+            {{ 'alerts.type.neurological' | translate }}
+          </option>
+          <option [value]="AlertType.FALL">
+            {{ 'alerts.type.fall' | translate }}
+          </option>
+          <option [value]="AlertType.MEDICATION">
+            {{ 'alerts.type.medication' | translate }}
+          </option>
+          <option [value]="AlertType.OTHER">
+            {{ 'alerts.type.other' | translate }}
+          </option>
+        </select>
+      </label>
+
+      <label class="form-field">
+        <span>{{ 'common.severity' | translate }}</span>
+        <select name="severity" [(ngModel)]="form.severity">
+          <option [value]="AlertSeverity.LOW">
+            {{ 'alerts.severity.low' | translate }}
+          </option>
+          <option [value]="AlertSeverity.MEDIUM">
+            {{ 'alerts.severity.medium' | translate }}
+          </option>
+          <option [value]="AlertSeverity.HIGH">
+            {{ 'alerts.severity.high' | translate }}
+          </option>
+          <option [value]="AlertSeverity.CRITICAL">
+            {{ 'alerts.severity.critical' | translate }}
+          </option>
+        </select>
+      </label>
+
+      <label class="form-field full-field">
+        <span>{{ 'common.description' | translate }}</span>
+        <textarea
+          name="description"
+          [(ngModel)]="form.description"
+          [placeholder]="'alerts.descriptionPlaceholder' | translate"
+          required
+        ></textarea>
+      </label>
+
+      <div class="form-actions full-field">
+        <button class="btn-secondary" type="button" (click)="cancelForm()">
+          {{ 'common.cancel' | translate }}
+        </button>
+        <button class="btn-primary" type="submit">
+          {{ 'alerts.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+
+  <div class="toolbar-card">
+    <div class="filter-group">
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === 'Todas'"
+        (click)="selectedFilter.set('Todas')"
+      >
+        {{ 'alerts.all' | translate }}
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === 'Críticas'"
+        (click)="selectedFilter.set('Críticas')"
+      >
+        {{ 'alerts.critical' | translate }}
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="selectedFilter() === 'Moderadas'"
+        (click)="selectedFilter.set('Moderadas')"
+      >
+        {{ 'alerts.moderate' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="alerts-grid">
+    @for (a of store.filterBy(selectedFilter()); track a.id) {
+    <div class="alert-card" [class.critical]="a.isCritical">
+      <div class="alert-top">
+        <div
+          class="alert-icon"
+          [class.crit-icon]="a.isCritical"
+          [class.mod-icon]="!a.isCritical"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            width="22"
+            height="22"
+          >
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+            />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        </div>
+        <span class="sev-tag" [class]="a.isCritical ? 'tag-crit' : 'tag-mod'"
+          >{{ a.severityLabel }}</span
+        >
+      </div>
+
+      <h3>{{ a.patientName }}</h3>
+      <p class="alert-title">{{ a.title }}</p>
+      <p class="alert-msg">{{ a.message }}</p>
+
+      <div class="status-line">
+        <span>{{ 'common.status' | translate }}</span>
+        <strong [attr.data-status]="a.status">{{ a.statusLabel }}</strong>
+      </div>
+
+      <div class="alert-bottom">
+        <span class="alert-time"
+          >{{ 'common.generated' | translate }}: {{ a.triggeredAt |
+          date:'dd/MM/yyyy h:mm a' }}</span
+        >
+
+        <div class="button-row">
+          @if (a.status === AlertStatus.OPEN) {
+          <button
+            class="btn-sm"
+            [disabled]="store.isActionPending(a.id)"
+            (click)="acknowledge(a.id)"
+          >
+            {{ (store.isActionPending(a.id) ? 'alerts.processing' :
+            'alerts.acknowledge') | translate }}
+          </button>
+          } @if (a.status === AlertStatus.ATTENDED) { @if (canCloseAlerts()) {
+          <button
+            class="btn-sm resolve"
+            [disabled]="store.isActionPending(a.id)"
+            (click)="resolve(a.id)"
+          >
+            {{ (store.isActionPending(a.id) ? 'alerts.processing' :
+            'alerts.resolve') | translate }}
+          </button>
+          } @else {
+          <span class="action-hint">
+            {{ 'alerts.awaitingMedicalClosure' | translate }}
+          </span>
+          } }
+        </div>
+      </div>
+    </div>
+    } @empty {
+    <div class="card empty-state">{{ 'alerts.emptyFilter' | translate }}</div>
+    }
+  </div>
+</div>

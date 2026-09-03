@@ -1,0 +1,247 @@
+.view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.page-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fff7ed, #f8fafc);
+  border: 1px solid #fed7aa;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ea580c;
+}
+
+.page-hero h2 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111827;
+  margin: 4px 0;
+}
+
+.page-hero p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+.view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-primary {
+  padding: 9px 20px;
+  background: #0f766e;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #115e59;
+}
+
+.btn-secondary {
+  padding: 9px 18px;
+  background: #fff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.form-title h3 {
+  margin: 0;
+  color: #111827;
+  font-size: 16px;
+}
+.form-title p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+.form-error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 700;
+}
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 14px;
+  align-items: end;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-field span {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  color: #1e293b;
+  background: #fff;
+  font-size: 13px;
+  outline: none;
+}
+.form-field textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+.span-2 {
+  grid-column: span 2;
+}
+.form-help {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  grid-column: span 2;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  grid-column: span 2;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table th {
+  text-align: left;
+  padding: 10px 12px;
+  color: #64748b;
+  font-weight: 700;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 12px;
+}
+.data-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+}
+.data-table tbody tr:hover {
+  background: #f8fafc;
+}
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+.avatar-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+.fw500 {
+  font-weight: 700;
+}
+.desc {
+  color: #64748b;
+  font-size: 12px;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.type-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  background: #e6fffb;
+  color: #0f766e;
+  font-weight: 800;
+}
+.sev-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+}
+.sev-Bajo {
+  background: #ecfdf5;
+  color: #059669;
+}
+.sev-Moderado {
+  background: #fef3c7;
+  color: #d97706;
+}
+.sev-Alto {
+  background: #fee2e2;
+  color: #dc2626;
+}
+.sev-Crítico {
+  background: #fecaca;
+  color: #991b1b;
+}
+.empty-state {
+  text-align: center;
+  color: #94a3b8;
+  padding: 28px;
+}
+@media (max-width: 900px) {
+  .page-hero {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .grid-form {
+    grid-template-columns: 1fr;
+  }
+  .span-2,
+  .form-help,
+  .form-actions {
+    grid-column: span 1;
+  }
+  .data-table {
+    display: block;
+    overflow: auto;
+  }
+}

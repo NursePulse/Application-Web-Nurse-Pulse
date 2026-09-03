@@ -1,0 +1,274 @@
+.view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.view-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.btn-primary {
+  padding: 8px 20px;
+  background: #0f766e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #115e59;
+}
+
+.btn-secondary {
+  padding: 8px 18px;
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-title h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.form-title p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 14px;
+  align-items: end;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-field span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #1e293b;
+  background: #ffffff;
+  font-size: 13px;
+  outline: none;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+}
+
+.form-help {
+  grid-column: span 2;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 10px 12px;
+  color: #64748b;
+  font-weight: 500;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 12px;
+}
+
+.data-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+}
+
+.name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.avatar-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+
+.mono {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+}
+
+.risk-badge {
+  padding: 3px 10px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.risk-LOW {
+  background: #ecfdf5;
+  color: #059669;
+}
+.risk-MEDIUM {
+  background: #fef3c7;
+  color: #d97706;
+}
+.risk-HIGH {
+  background: #fee2e2;
+  color: #dc2626;
+}
+.risk-Crítico {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+@media (max-width: 900px) {
+  .grid-form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-help {
+    grid-column: span 1;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .form-actions button {
+    flex: 1;
+  }
+}
+
+.form-error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 700;
+}
+.empty-state {
+  text-align: center;
+  color: #94a3b8;
+  padding: 28px;
+}
+.card {
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  border-radius: 16px;
+}
+.btn-primary {
+  font-weight: 700;
+  border-radius: 10px;
+}
+.btn-secondary {
+  font-weight: 700;
+  border-radius: 10px;
+}
+.data-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.risk-UNASSESSED {
+  background: #f1f5f9;
+  color: #475569;
+}
+.risk-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.risk-LOW {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.risk-MEDIUM {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.risk-HIGH {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+.risk-CRITICAL {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.risk-UNASSESSED {
+  background: #f1f5f9;
+  color: #475569;
+}

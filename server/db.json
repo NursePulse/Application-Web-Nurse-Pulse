@@ -1,0 +1,274 @@
+{
+  "patients": [
+    {
+      "id": "p-001",
+      "code": "P001",
+      "firstName": "Carlos",
+      "lastName": "Mendoza",
+      "documentNumber": "12345678",
+      "dateOfBirth": "1965-04-15T00:00:00.000Z",
+      "gender": "Masculino",
+      "phone": "999111222",
+      "email": "carlos@mail.com",
+      "status": "Estable",
+      "roomNumber": "101"
+    },
+    {
+      "id": "p-002",
+      "code": "P002",
+      "firstName": "María",
+      "lastName": "López",
+      "documentNumber": "87654321",
+      "dateOfBirth": "1972-08-22T00:00:00.000Z",
+      "gender": "Femenino",
+      "phone": "999333444",
+      "email": "maria@mail.com",
+      "status": "En observación",
+      "roomNumber": "102"
+    },
+    {
+      "id": "p-003",
+      "code": "P003",
+      "firstName": "Jorge",
+      "lastName": "Ramírez",
+      "documentNumber": "11223344",
+      "dateOfBirth": "1958-02-10T00:00:00.000Z",
+      "gender": "Masculino",
+      "phone": "999555666",
+      "email": "jorge@mail.com",
+      "status": "Inestable",
+      "roomNumber": "103"
+    },
+    {
+      "id": "p-004",
+      "code": "P004",
+      "firstName": "Ana",
+      "lastName": "Torres",
+      "documentNumber": "44332211",
+      "dateOfBirth": "1980-12-05T00:00:00.000Z",
+      "gender": "Femenino",
+      "phone": "999777888",
+      "email": "ana@mail.com",
+      "status": "Estable",
+      "roomNumber": "104"
+    },
+    {
+      "id": "p-005",
+      "code": "P005",
+      "firstName": "Luis",
+      "lastName": "García",
+      "documentNumber": "55667788",
+      "dateOfBirth": "1969-06-30T00:00:00.000Z",
+      "gender": "Masculino",
+      "phone": "999999000",
+      "email": "luis@mail.com",
+      "status": "En observación",
+      "roomNumber": "105"
+    }
+  ],
+  "vital-signs": [
+    {
+      "id": "vs-001",
+      "patientId": "p-001",
+      "patientName": "Carlos Mendoza",
+      "nurseId": "n-001",
+      "heartRate": 78,
+      "respiratoryRate": 18,
+      "systolic": 120,
+      "diastolic": 80,
+      "oxygenSaturation": 98,
+      "temperature": 36.5,
+      "riskLevel": "Bajo",
+      "recordedAt": "2026-05-11T12:10:00.000Z"
+    },
+    {
+      "id": "vs-002",
+      "patientId": "p-002",
+      "patientName": "María López",
+      "nurseId": "n-001",
+      "heartRate": 92,
+      "respiratoryRate": 20,
+      "systolic": 130,
+      "diastolic": 85,
+      "oxygenSaturation": 96,
+      "temperature": 36.8,
+      "riskLevel": "Medio",
+      "recordedAt": "2026-05-11T12:20:00.000Z"
+    },
+    {
+      "id": "vs-003",
+      "patientId": "p-003",
+      "patientName": "Jorge Ramírez",
+      "nurseId": "n-001",
+      "heartRate": 115,
+      "respiratoryRate": 24,
+      "systolic": 150,
+      "diastolic": 95,
+      "oxygenSaturation": 93,
+      "temperature": 37.2,
+      "riskLevel": "Alto",
+      "recordedAt": "2026-05-11T12:30:00.000Z"
+    },
+    {
+      "id": "vs-004",
+      "patientId": "p-004",
+      "patientName": "Ana Torres",
+      "nurseId": "n-001",
+      "heartRate": 74,
+      "respiratoryRate": 16,
+      "systolic": 118,
+      "diastolic": 76,
+      "oxygenSaturation": 88,
+      "temperature": 36.4,
+      "riskLevel": "Crítico",
+      "recordedAt": "2026-05-11T12:40:00.000Z"
+    }
+  ],
+  "clinical-events": [
+    {
+      "id": "ce-001",
+      "patientId": "p-001",
+      "patientName": "Carlos Mendoza",
+      "nurseId": "n-001",
+      "nurseName": "Enfermera Ana",
+      "eventType": "Medicación administrada",
+      "severity": "Bajo",
+      "title": "Administración de Enalapril 10mg",
+      "description": "Dosis matutina administrada correctamente",
+      "occurredAt": "2026-05-11T08:10:00.000Z"
+    },
+    {
+      "id": "ce-002",
+      "patientId": "p-003",
+      "patientName": "Jorge Ramírez",
+      "nurseId": "n-001",
+      "nurseName": "Enfermera Ana",
+      "eventType": "Cambio de condición",
+      "severity": "Alto",
+      "title": "Elevación de presión arterial",
+      "description": "Presión arterial sistólica superó 150 mmHg",
+      "occurredAt": "2026-05-11T09:20:00.000Z"
+    },
+    {
+      "id": "ce-003",
+      "patientId": "p-002",
+      "patientName": "María López",
+      "nurseId": "n-002",
+      "nurseName": "Enfermero Luis",
+      "eventType": "Procedimiento realizado",
+      "severity": "Moderado",
+      "title": "Electrocardiograma realizado",
+      "description": "ECG de control sin hallazgos significativos",
+      "occurredAt": "2026-05-11T10:15:00.000Z"
+    }
+  ],
+  "sbar-transfers": [
+    {
+      "id": "sb-001",
+      "patientId": "p-002",
+      "patientName": "María López",
+      "sourceNurseId": "n-001",
+      "sourceNurseName": "Enfermera Ana",
+      "targetNurseId": "n-002",
+      "targetNurseName": "Enfermero Luis",
+      "situation": "Paciente con TA elevada en las últimas 2 horas",
+      "background": "Hipertensión crónica diagnosticada hace 5 años. Tratamiento actual: Losartán 50mg",
+      "assessment": "TA actual 150/95. FC 92. Paciente refiere cefalea leve.",
+      "recommendation": "Ajustar dosis de antihipertensivo y monitorizar cada 30 min.",
+      "transferredAt": "2026-05-11T11:30:00.000Z"
+    }
+  ],
+  "alerts": [
+    {
+      "id": "a-001",
+      "patientId": "p-003",
+      "patientName": "Jorge Ramírez",
+      "title": "TA 150/95 mmHg",
+      "message": "Presión arterial por encima del rango normal",
+      "severity": "Crítica",
+      "status": "Activa",
+      "triggeredAt": "2026-05-11T12:31:00.000Z"
+    },
+    {
+      "id": "a-002",
+      "patientId": "p-007",
+      "patientName": "Paciente 007",
+      "title": "FC 128 lpm",
+      "message": "Frecuencia cardíaca elevada — taquicardia",
+      "severity": "Crítica",
+      "status": "Activa",
+      "triggeredAt": "2026-05-11T12:35:00.000Z"
+    },
+    {
+      "id": "a-003",
+      "patientId": "p-004",
+      "patientName": "Ana Torres",
+      "title": "SatO₂ 88%",
+      "message": "Saturación de oxígeno por debajo del umbral",
+      "severity": "Moderada",
+      "status": "Activa",
+      "triggeredAt": "2026-05-11T12:42:00.000Z"
+    },
+    {
+      "id": "a-004",
+      "patientId": "p-011",
+      "patientName": "Paciente 011",
+      "title": "FR 30 rpm",
+      "message": "Frecuencia respiratoria elevada",
+      "severity": "Moderada",
+      "status": "Activa",
+      "triggeredAt": "2026-05-11T12:50:00.000Z"
+    }
+  ],
+  "reports": [
+    {
+      "id": "r-001",
+      "type": "Signos vitales",
+      "title": "Resumen semanal de signos vitales",
+      "generatedBy": "Enfermera Ana",
+      "startDate": "2026-05-01T00:00:00.000Z",
+      "endDate": "2026-05-07T00:00:00.000Z",
+      "status": "Completado",
+      "createdAt": "2026-05-08T10:00:00.000Z"
+    },
+    {
+      "id": "r-002",
+      "type": "Pacientes",
+      "title": "Estado general de pacientes",
+      "generatedBy": "Admin",
+      "startDate": "2026-05-01T00:00:00.000Z",
+      "endDate": "2026-05-11T00:00:00.000Z",
+      "status": "Completado",
+      "createdAt": "2026-05-11T10:00:00.000Z"
+    }
+  ],
+  "audit-logs": [
+    {
+      "id": "al-001",
+      "code": "US-01",
+      "userId": "n-001",
+      "username": "Enfermera Ana",
+      "action": "Registró signos vitales",
+      "description": "Registró signos vitales de Carlos Mendoza",
+      "performedAt": "2026-05-11T08:00:00.000Z"
+    },
+    {
+      "id": "al-002",
+      "code": "US-02",
+      "userId": "n-001",
+      "username": "Enfermera Ana",
+      "action": "Registró evento clínico",
+      "description": "Registró evento clínico en Jorge Ramírez",
+      "performedAt": "2026-05-11T09:20:00.000Z"
+    },
+    {
+      "id": "al-003",
+      "code": "US-05",
+      "userId": "n-002",
+      "username": "Enfermero Luis",
+      "action": "Traspaso SBAR registrado",
+      "description": "Traspaso SBAR registrado para María López",
+      "performedAt": "2026-05-11T11:30:00.000Z"
+    }
+  ]
+}
