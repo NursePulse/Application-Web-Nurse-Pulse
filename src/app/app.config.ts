@@ -12,11 +12,11 @@ import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
 
 import { routes } from "./app.routes";
 
-const PULSE_REPORT_LANGUAGE_KEY = "pulse-report-language";
+const NURSE_PULSE_LANGUAGE_KEY = "nurse-pulse-language";
 type AppLanguage = "es" | "en";
 
 function getStoredLanguage(): AppLanguage {
-  const stored = localStorage.getItem(PULSE_REPORT_LANGUAGE_KEY);
+  const stored = localStorage.getItem(NURSE_PULSE_LANGUAGE_KEY);
   return stored === "en" || stored === "es" ? stored : "es";
 }
 

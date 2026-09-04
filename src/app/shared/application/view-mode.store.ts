@@ -2,7 +2,7 @@ import { Injectable, computed, signal } from "@angular/core";
 
 export type ViewMode = "admin" | "doctor" | "nurse";
 
-const VIEW_MODE_KEY = "pulse-report-view-mode";
+const VIEW_MODE_KEY = "nurse-pulse-view-mode";
 
 @Injectable({ providedIn: "root" })
 export class ViewModeStore {

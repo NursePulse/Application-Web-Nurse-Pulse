@@ -7,7 +7,7 @@
             },
     "newProjectRoot":  "projects",
     "projects":  {
-                     "FrontPulseReport":  {
+                     "FrontNursePulse":  {
                                               "projectType":  "application",
                                               "schematics":  {
 
@@ -65,10 +65,10 @@
                                                                               "builder":  "@angular/build:dev-server",
                                                                               "configurations":  {
                                                                                                      "production":  {
-                                                                                                                        "buildTarget":  "FrontPulseReport:build:production"
+                                                                                                                        "buildTarget":  "FrontNursePulse:build:production"
                                                                                                                     },
                                                                                                      "development":  {
-                                                                                                                         "buildTarget":  "FrontPulseReport:build:development"
+                                                                                                                         "buildTarget":  "FrontNursePulse:build:development"
                                                                                                                      }
                                                                                                  },
                                                                               "defaultConfiguration":  "development"

@@ -1,7 +1,7 @@
 import { Injectable, computed, signal } from "@angular/core";
 import { Plan, PlanId } from "../domain/model/plan.entity";
 
-const SUBSCRIPTION_KEY = "pulse-report-subscription-plan";
+const SUBSCRIPTION_KEY = "nurse-pulse-subscription-plan";
 
 const PLAN_CATALOG: Plan[] = [
   new Plan(

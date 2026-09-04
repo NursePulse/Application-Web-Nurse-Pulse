@@ -21,7 +21,7 @@ export class ReportStore {
   private readonly alertsApi = inject(NotificationApiEndpoint);
   private readonly auditApi = inject(AuditApiEndpoint);
 
-  private readonly storageKey = "pulse-report.generated-reports";
+  private readonly storageKey = "nurse-pulse.generated-reports";
 
   private readonly _reports = signal<Report[]>([]);
   readonly reports = this._reports.asReadonly();

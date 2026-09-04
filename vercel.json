@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/FrontPulseReport/browser",
+  "outputDirectory": "dist/FrontNursePulse/browser",
   "installCommand": "npm ci --omit=dev",
   "rewrites": [
     {

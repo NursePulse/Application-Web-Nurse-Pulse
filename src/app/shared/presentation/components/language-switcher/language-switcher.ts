@@ -11,7 +11,7 @@ type AppLanguage = "es" | "en";
   styleUrl: "./language-switcher.css",
 })
 export class LanguageSwitcherComponent {
-  private readonly storageKey = "pulse-report-language";
+  private readonly storageKey = "nurse-pulse-language";
   protected readonly translate = inject(TranslateService);
   protected readonly languages: AppLanguage[] = ["es", "en"];
 

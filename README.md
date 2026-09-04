@@ -1,4 +1,4 @@
-# FrontPulseReport
+# FrontNursePulse
 
 Proyecto Angular conectado a `json-server` mediante `server/db.json`.
 

@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { UserRole } from "../domain/model/user.entity";
 
-const TOKEN_KEY = "pulse-report-token";
-const USER_KEY = "pulse-report-user";
+const TOKEN_KEY = "nurse-pulse-token";
+const USER_KEY = "nurse-pulse-user";
 
 export interface StoredUser {
   id: string;
