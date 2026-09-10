@@ -98,7 +98,7 @@ export class SbarAssembler {
 
   private static extract(text: string, label: string): string | null {
     const regex = new RegExp(
-      `${label}:\\\\s*([\\\\s\\\\S]*?)(?=\\\\n[A-Za-z]+:|$)`,
+      `${label}:\\s*([\\s\\S]*?)(?=\\n[A-Za-z]+:|$)`,
       "i",
     );
     const match = text.match(regex);
