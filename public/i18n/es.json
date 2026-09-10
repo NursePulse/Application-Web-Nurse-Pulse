@@ -486,5 +486,15 @@
   "users.errors.network": "No se pudo conectar con el servidor.",
   "users.errors.generic": "Ocurrió un error al actualizar el rol.",
   "events.errors.load": "No se pudieron cargar los eventos clínicos.",
-  "events.errors.save": "No se pudo registrar el evento clínico. Inténtalo de nuevo."
+  "events.errors.save": "No se pudo registrar el evento clínico. Inténtalo de nuevo.",
+  "patients.errors.load": "No se pudieron cargar los pacientes.",
+  "patients.errors.save": "No se pudo guardar el paciente. Verifica los datos e inténtalo de nuevo.",
+  "patients.errors.delete": "No se pudo eliminar el paciente. Inténtalo de nuevo.",
+  "vitals.errors.load": "No se pudieron cargar los signos vitales.",
+  "vitals.errors.save": "No se pudo registrar el signo vital. Inténtalo de nuevo.",
+  "sbar.errors.load": "No se pudieron cargar los traspasos SBAR.",
+  "sbar.errors.save": "No se pudo registrar el traspaso SBAR. Inténtalo de nuevo.",
+  "sbar.errors.acknowledge": "No se pudo confirmar la recepción del traspaso. Inténtalo de nuevo.",
+  "alerts.errors.load": "No se pudieron cargar las alertas.",
+  "alerts.errors.save": "No se pudo crear la alerta. Inténtalo de nuevo."
 }

@@ -49,16 +49,22 @@ export class NotificationStore {
   readonly actionErrorKey = this._actionErrorKey.asReadonly();
 
   loadAlerts(): void {
-    this.api.getAll().subscribe((res) => {
-      const alerts = AlertAssembler.toEntityList(res, (id) =>
-        this.resolvePatientName(id),
-      ).sort((a, b) => b.triggeredAt.getTime() - a.triggeredAt.getTime());
+    this._actionErrorKey.set(null);
+    this.api.getAll().subscribe({
+      next: (res) => {
+        const alerts = AlertAssembler.toEntityList(res, (id) =>
+          this.resolvePatientName(id),
+        ).sort((a, b) => b.triggeredAt.getTime() - a.triggeredAt.getTime());
 
-      this._alerts.set(alerts);
+        this._alerts.set(alerts);
+      },
+      error: () => this._actionErrorKey.set("alerts.errors.load"),
     });
   }
 
-  createManualAlert(request: ManualAlertPayload): void {
+  createManualAlert(request: ManualAlertPayload, onSuccess?: () => void): void {
+    this._actionErrorKey.set(null);
+
     const payload = {
       patientId: Number(request.patientId),
       type: request.type,
@@ -67,16 +73,20 @@ export class NotificationStore {
       triggeredBy: DEFAULT_ACTOR,
     };
 
-    this.api.create(payload).subscribe((created) => {
-      const alert = AlertAssembler.toEntity(
-        created,
-        this.resolvePatientName(String(created.patientId)),
-      );
-      this._alerts.update((list) => [alert, ...list]);
-      this.audit.register(
-        AuditAction.ALERT_CREATED,
-        `Creó alerta para ${alert.patientName}: ${alert.title}`,
-      );
+    this.api.create(payload).subscribe({
+      next: (created) => {
+        const alert = AlertAssembler.toEntity(
+          created,
+          this.resolvePatientName(String(created.patientId)),
+        );
+        this._alerts.update((list) => [alert, ...list]);
+        this.audit.register(
+          AuditAction.ALERT_CREATED,
+          `Creó alerta para ${alert.patientName}: ${alert.title}`,
+        );
+        onSuccess?.();
+      },
+      error: () => this._actionErrorKey.set("alerts.errors.save"),
     });
   }
 
@@ -89,17 +99,20 @@ export class NotificationStore {
       triggeredBy: DEFAULT_ACTOR,
     };
 
-    this.api.create(payload).subscribe((created) => {
-      const alert = AlertAssembler.toEntity(
-        created,
-        request.patientName ??
-          this.resolvePatientName(String(created.patientId)),
-      );
-      this._alerts.update((list) => [alert, ...list]);
-      this.audit.register(
-        AuditAction.ALERT_CREATED,
-        `Alerta generada para ${alert.patientName}: ${alert.title}`,
-      );
+    this.api.create(payload).subscribe({
+      next: (created) => {
+        const alert = AlertAssembler.toEntity(
+          created,
+          request.patientName ??
+            this.resolvePatientName(String(created.patientId)),
+        );
+        this._alerts.update((list) => [alert, ...list]);
+        this.audit.register(
+          AuditAction.ALERT_CREATED,
+          `Alerta generada para ${alert.patientName}: ${alert.title}`,
+        );
+      },
+      error: () => this._actionErrorKey.set("alerts.errors.save"),
     });
   }
 

@@ -43,8 +43,15 @@ export class PatientListComponent implements OnInit {
       bedNumber: "",
       attendingPhysician: "",
       status: PatientStatusEnum.OBSERVATION,
-      admissionDate: new Date().toISOString().slice(0, 10),
+      admissionDate: this.todayLocalDate(),
     };
+  }
+
+  private todayLocalDate(): string {
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${now.getFullYear()}-${month}-${day}`;
   }
 
   private fillForm(patient: Patient): void {
@@ -183,11 +190,9 @@ export class PatientListComponent implements OnInit {
     };
 
     if (editingId) {
-      this.store.updatePatient(editingId, request);
+      this.store.updatePatient(editingId, request, () => this.cancelForm());
     } else {
-      this.store.createPatient(request);
+      this.store.createPatient(request, () => this.cancelForm());
     }
-
-    this.cancelForm();
   }
 }

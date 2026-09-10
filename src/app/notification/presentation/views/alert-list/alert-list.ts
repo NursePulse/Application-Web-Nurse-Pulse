@@ -79,14 +79,15 @@ export class AlertListComponent implements OnInit {
       return;
     }
 
-    this.store.createManualAlert({
-      patientId: this.form.patientId,
-      type: this.form.type,
-      severity: this.form.severity,
-      description: this.form.description.trim(),
-    });
-
-    this.cancelForm();
+    this.store.createManualAlert(
+      {
+        patientId: this.form.patientId,
+        type: this.form.type,
+        severity: this.form.severity,
+        description: this.form.description.trim(),
+      },
+      () => this.cancelForm(),
+    );
   }
 
   acknowledge(id: string): void {
