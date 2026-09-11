@@ -10,8 +10,6 @@ import { AuditStore } from "@audit/application/audit.store";
 import { AuditAction } from "@audit/domain/model/audit-log.entity";
 import { UsersStore } from "@iam/application/users.store";
 
-const DEFAULT_ACTOR = "Equipo clínico";
-
 export interface SbarForm {
   patientId: string;
   targetNurseId: string;
@@ -54,6 +52,7 @@ export class SbarStore {
                       (id) =>
                         patients.find((p) => p.id === id)?.fullName ??
                         `Paciente #${id}`,
+                      (id) => this.resolveReceiverName(id),
                     ),
                   ),
                 ),
@@ -83,14 +82,13 @@ export class SbarStore {
     const request = {
       patientId: Number(form.patientId),
       title: `SBAR - ${patient?.fullName ?? "Paciente"}`,
-      description: SbarAssembler.buildDescription(
-        form.targetNurseId,
-        receiverName,
-        form.situation,
-        form.background,
-        form.assessment,
-        form.recommendation,
-      ),
+      situation: form.situation,
+      background: form.background,
+      assessment: form.assessment,
+      recommendation: form.recommendation,
+      targetNurseId: form.targetNurseId
+        ? Number(form.targetNurseId)
+        : undefined,
     };
 
     this.api
@@ -106,11 +104,15 @@ export class SbarStore {
       )
       .subscribe({
         next: (created) => {
-          const transfer = SbarAssembler.toEntity(created, patient?.fullName);
+          const transfer = SbarAssembler.toEntity(
+            created,
+            patient?.fullName,
+            receiverName,
+          );
           this._transfers.update((list) => [transfer, ...list]);
           this.audit.register(
             AuditAction.SBAR_TRANSFER,
-            `Registró traspaso SBAR para ${transfer.patientName} enviado a ${receiverName} por ${DEFAULT_ACTOR}`,
+            `Registró traspaso SBAR para ${transfer.patientName} enviado a ${receiverName}`,
           );
           onSuccess?.();
         },
@@ -120,14 +122,12 @@ export class SbarStore {
 
   acknowledgeTransfer(
     transferId: string,
-    incomingNurseId: string,
     notes = "Traspaso SBAR revisado y atendido.",
     onSuccess?: () => void,
   ): void {
     this.errorKey.set(null);
     this.api
       .acknowledge(transferId, {
-        incomingNurseId: Number(incomingNurseId),
         additionalNotes: notes,
       })
       .subscribe({
@@ -135,6 +135,9 @@ export class SbarStore {
           const transfer = SbarAssembler.toEntity(
             updated,
             this.resolvePatientName(String(updated.patientId)),
+            updated.targetNurseId != null
+              ? this.resolveReceiverName(String(updated.targetNurseId))
+              : undefined,
           );
           this._transfers.update((list) =>
             list.map((item) => (item.id === transfer.id ? transfer : item)),

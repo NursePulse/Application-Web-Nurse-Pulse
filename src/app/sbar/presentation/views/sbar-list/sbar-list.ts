@@ -68,8 +68,8 @@ export class SbarListComponent implements OnInit {
     );
   }
 
-  acknowledge(id: string, incomingNurseId: string): void {
-    this.store.acknowledgeTransfer(id, incomingNurseId);
+  acknowledge(id: string): void {
+    this.store.acknowledgeTransfer(id);
   }
 
   private emptyForm() {
