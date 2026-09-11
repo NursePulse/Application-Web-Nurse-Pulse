@@ -8,6 +8,7 @@ import { PatientApiEndpoint } from "@patient/infrastructure/patient-api-endpoint
 import { PatientAssembler } from "@patient/infrastructure/patient-assembler";
 import { AuditStore } from "@audit/application/audit.store";
 import { AuditAction } from "@audit/domain/model/audit-log.entity";
+import { UsersStore } from "@iam/application/users.store";
 
 const DEFAULT_ACTOR = "Equipo clínico";
 
@@ -26,6 +27,7 @@ export class SbarStore {
   private readonly patientApi = inject(PatientApiEndpoint);
   private readonly patients = inject(PatientStore);
   private readonly audit = inject(AuditStore);
+  private readonly users = inject(UsersStore);
 
   private readonly _transfers = signal<SbarTransfer[]>([]);
   readonly transfers = this._transfers.asReadonly();
@@ -139,12 +141,9 @@ export class SbarStore {
   }
 
   private resolveReceiverName(id: string): string {
-    const names: Record<string, string> = {
-      "2": "Enfermero Luis",
-      "3": "Enfermera Laura",
-      "4": "Enfermera Claudia",
-    };
-
-    return names[id] ?? `Enfermero #${id}`;
+    return (
+      this.users.users().find((user) => user.id === id)?.username ??
+      `Enfermero #${id}`
+    );
   }
 }
