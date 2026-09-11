@@ -1,10 +1,13 @@
 export interface RegisterSbarRequest {
   patientId: number;
   title: string;
-  description: string;
+  situation: string;
+  background: string;
+  assessment: string;
+  recommendation: string;
+  targetNurseId?: number;
 }
 
 export interface AcknowledgeSbarRequest {
-  incomingNurseId: number;
   additionalNotes?: string;
 }
