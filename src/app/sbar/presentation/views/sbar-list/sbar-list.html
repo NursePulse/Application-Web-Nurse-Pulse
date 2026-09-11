@@ -36,9 +36,10 @@
       <label class="form-field">
         <span>{{ 'sbar.receiver' | translate }}</span>
         <select name="targetNurseId" [(ngModel)]="form.targetNurseId">
-          <option value="2">Enfermero Luis</option>
-          <option value="3">Enfermera Laura</option>
-          <option value="4">Enfermera Claudia</option>
+          <option value="">{{ 'sbar.selectReceiver' | translate }}</option>
+          @for (u of receiverOptions(); track u.id) {
+          <option [value]="u.id">{{ u.username }}</option>
+          }
         </select>
       </label>
 

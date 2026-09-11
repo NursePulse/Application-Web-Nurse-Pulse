@@ -3,6 +3,8 @@ import { DatePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { SbarStore } from "../../../application/sbar.store";
 import { PatientStore } from "@patient/application/patient.store";
+import { UsersStore } from "@iam/application/users.store";
+import { AuthStore } from "@iam/application/auth.store";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -15,6 +17,8 @@ import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 export class SbarListComponent implements OnInit {
   protected store = inject(SbarStore);
   protected patientStore = inject(PatientStore);
+  protected usersStore = inject(UsersStore);
+  private authStore = inject(AuthStore);
   private translate = inject(TranslateService);
 
   showForm = signal(false);
@@ -24,7 +28,17 @@ export class SbarListComponent implements OnInit {
 
   ngOnInit(): void {
     this.patientStore.loadPatients();
+    this.usersStore.loadUsers();
     this.store.loadTransfers();
+  }
+
+  protected receiverOptions() {
+    const currentUserId = this.authStore.user()?.id;
+    return this.usersStore
+      .users()
+      .filter(
+        (user) => user.roles.includes("ROLE_NURSE") && user.id !== currentUserId,
+      );
   }
 
   openForm(): void {
@@ -60,7 +74,7 @@ export class SbarListComponent implements OnInit {
   private emptyForm() {
     return {
       patientId: "",
-      targetNurseId: "2",
+      targetNurseId: "",
       situation: "",
       background: "",
       assessment: "",
@@ -71,6 +85,8 @@ export class SbarListComponent implements OnInit {
   private validateForm(): string | null {
     if (!this.form.patientId)
       return this.translate.instant("sbar.validation.patientRequired");
+    if (!this.form.targetNurseId)
+      return this.translate.instant("sbar.validation.receiverRequired");
     if (this.form.situation.trim().length < 8)
       return this.translate.instant("sbar.validation.situation");
     if (this.form.background.trim().length < 8)
