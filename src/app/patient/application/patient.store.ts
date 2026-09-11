@@ -13,32 +13,47 @@ export class PatientStore {
 
   private _patients = signal<Patient[]>([]);
   readonly patients = this._patients.asReadonly();
+  readonly errorKey = signal<string | null>(null);
 
   loadPatients(): void {
-    this.api
-      .getAll()
-      .subscribe((res) =>
-        this._patients.set(PatientAssembler.toEntityList(res)),
-      );
-  }
-
-  createPatient(request: RegisterPatientRequest): void {
-    this.api.create(request).subscribe((created) => {
-      const patient = PatientAssembler.toEntity(created);
-      this._patients.update((list) => [...list, patient]);
-      this.audit.register(
-        AuditAction.PATIENT_CREATED,
-        `Registró al paciente ${patient.fullName}`,
-      );
+    this.errorKey.set(null);
+    this.api.getAll().subscribe({
+      next: (res) => this._patients.set(PatientAssembler.toEntityList(res)),
+      error: () => this.errorKey.set("patients.errors.load"),
     });
   }
 
-  updatePatient(patientId: string, request: RegisterPatientRequest): void {
-    this.api.update(patientId, request).subscribe((updated) => {
-      const patient = PatientAssembler.toEntity(updated);
-      this._patients.update((list) =>
-        list.map((p) => (p.id === patient.id ? patient : p)),
-      );
+  createPatient(request: RegisterPatientRequest, onSuccess?: () => void): void {
+    this.errorKey.set(null);
+    this.api.create(request).subscribe({
+      next: (created) => {
+        const patient = PatientAssembler.toEntity(created);
+        this._patients.update((list) => [...list, patient]);
+        this.audit.register(
+          AuditAction.PATIENT_CREATED,
+          `Registró al paciente ${patient.fullName}`,
+        );
+        onSuccess?.();
+      },
+      error: () => this.errorKey.set("patients.errors.save"),
+    });
+  }
+
+  updatePatient(
+    patientId: string,
+    request: RegisterPatientRequest,
+    onSuccess?: () => void,
+  ): void {
+    this.errorKey.set(null);
+    this.api.update(patientId, request).subscribe({
+      next: (updated) => {
+        const patient = PatientAssembler.toEntity(updated);
+        this._patients.update((list) =>
+          list.map((p) => (p.id === patient.id ? patient : p)),
+        );
+        onSuccess?.();
+      },
+      error: () => this.errorKey.set("patients.errors.save"),
     });
   }
 
@@ -64,10 +79,14 @@ export class PatientStore {
   }
 
   deletePatient(patientId: string): void {
-    this.api.delete(patientId).subscribe(() => {
-      this._patients.update((list) =>
-        list.filter((patient) => patient.id !== patientId),
-      );
+    this.errorKey.set(null);
+    this.api.delete(patientId).subscribe({
+      next: () => {
+        this._patients.update((list) =>
+          list.filter((patient) => patient.id !== patientId),
+        );
+      },
+      error: () => this.errorKey.set("patients.errors.delete"),
     });
   }
 }

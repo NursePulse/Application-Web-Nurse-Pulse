@@ -56,15 +56,16 @@ export class SbarListComponent implements OnInit {
     this.errorMessage.set(this.validateForm());
     if (this.errorMessage()) return;
 
-    this.store.registerTransfer({
-      ...this.form,
-      situation: this.form.situation.trim(),
-      background: this.form.background.trim(),
-      assessment: this.form.assessment.trim(),
-      recommendation: this.form.recommendation.trim(),
-    });
-
-    this.cancelForm();
+    this.store.registerTransfer(
+      {
+        ...this.form,
+        situation: this.form.situation.trim(),
+        background: this.form.background.trim(),
+        assessment: this.form.assessment.trim(),
+        recommendation: this.form.recommendation.trim(),
+      },
+      () => this.cancelForm(),
+    );
   }
 
   acknowledge(id: string, incomingNurseId: string): void {

@@ -27,33 +27,44 @@ export class VitalSignStore {
 
   private readonly _vitalSigns = signal<VitalSign[]>([]);
   readonly vitalSigns = this._vitalSigns.asReadonly();
+  readonly errorKey = signal<string | null>(null);
 
   loadVitalSigns(): void {
-    this.api.getAll().subscribe((res) => {
-      const signs = VitalSignAssembler.toEntityList(res, (id) =>
-        this.resolvePatientName(id),
-      ).sort((a, b) => b.recordedAt.getTime() - a.recordedAt.getTime());
+    this.errorKey.set(null);
+    this.api.getAll().subscribe({
+      next: (res) => {
+        const signs = VitalSignAssembler.toEntityList(res, (id) =>
+          this.resolvePatientName(id),
+        ).sort((a, b) => b.recordedAt.getTime() - a.recordedAt.getTime());
 
-      this._vitalSigns.set(signs);
+        this._vitalSigns.set(signs);
+      },
+      error: () => this.errorKey.set("vitals.errors.load"),
     });
   }
 
   loadByPatientId(patientId: string): void {
-    this.api.getByPatientId(patientId).subscribe((res) => {
-      const signs = VitalSignAssembler.toEntityList(res, (id) =>
-        this.resolvePatientName(id),
-      ).sort((a, b) => b.recordedAt.getTime() - a.recordedAt.getTime());
+    this.errorKey.set(null);
+    this.api.getByPatientId(patientId).subscribe({
+      next: (res) => {
+        const signs = VitalSignAssembler.toEntityList(res, (id) =>
+          this.resolvePatientName(id),
+        ).sort((a, b) => b.recordedAt.getTime() - a.recordedAt.getTime());
 
-      this._vitalSigns.update((current) =>
-        [
-          ...signs,
-          ...current.filter((item) => item.patientId !== patientId),
-        ].sort((a, b) => b.recordedAt.getTime() - a.recordedAt.getTime()),
-      );
+        this._vitalSigns.update((current) =>
+          [
+            ...signs,
+            ...current.filter((item) => item.patientId !== patientId),
+          ].sort((a, b) => b.recordedAt.getTime() - a.recordedAt.getTime()),
+        );
+      },
+      error: () => this.errorKey.set("vitals.errors.load"),
     });
   }
 
-  recordVitalSign(form: VitalSignForm): void {
+  recordVitalSign(form: VitalSignForm, onSuccess?: () => void): void {
+    this.errorKey.set(null);
+
     const request = {
       patientId: Number(form.patientId),
       nurseId: 1,
@@ -63,26 +74,29 @@ export class VitalSignStore {
       diastolicPressure: Number(form.diastolic),
       oxygenSaturation: Number(form.oxygenSaturation),
       temperature: Number(form.temperature),
-      recordedAt: new Date().toISOString().slice(0, 19),
     };
 
-    this.api.record(request).subscribe((created) => {
-      const sign = VitalSignAssembler.toEntity(
-        created,
-        this.resolvePatientName(String(created.patientId)),
-      );
+    this.api.record(request).subscribe({
+      next: (created) => {
+        const sign = VitalSignAssembler.toEntity(
+          created,
+          this.resolvePatientName(String(created.patientId)),
+        );
 
-      this._vitalSigns.update((list) => [sign, ...list]);
-      this.audit.register(
-        AuditAction.VITAL_SIGN_RECORDED,
-        `Registró signos vitales de ${sign.patientName} con riesgo ${sign.riskLabel}`,
-      );
-      this.audit.register(
-        AuditAction.BUSINESS_TRANSACTION_EXECUTED,
-        `Transacción: signos vitales → evaluación de riesgo → alertas → auditoría para ${sign.patientName}`,
-      );
+        this._vitalSigns.update((list) => [sign, ...list]);
+        this.audit.register(
+          AuditAction.VITAL_SIGN_RECORDED,
+          `Registró signos vitales de ${sign.patientName} con riesgo ${sign.riskLabel}`,
+        );
+        this.audit.register(
+          AuditAction.BUSINESS_TRANSACTION_EXECUTED,
+          `Transacción: signos vitales → evaluación de riesgo → alertas → auditoría para ${sign.patientName}`,
+        );
 
-      this.createAlertsWhenNeeded(sign);
+        this.createAlertsWhenNeeded(sign);
+        onSuccess?.();
+      },
+      error: () => this.errorKey.set("vitals.errors.save"),
     });
   }
 
