@@ -5,6 +5,14 @@
     <p>{{ 'subscriptions.subtitle' | translate }}</p>
   </header>
 
+  <div class="demo-notice" role="note">
+    <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v5M12 16h.01" />
+    </svg>
+    {{ 'subscriptions.demoNotice' | translate }}
+  </div>
+
   @if (activatedPlan(); as plan) {
   <div class="activation-banner" role="status">
     <span>
