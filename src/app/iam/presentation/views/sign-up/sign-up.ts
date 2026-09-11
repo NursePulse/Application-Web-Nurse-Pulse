@@ -8,6 +8,8 @@ import { AuthStore } from "../../../application/auth.store";
 import { ClinicalRegistrationRole } from "../../../infrastructure/sign-up.request";
 import { LanguageSwitcherComponent } from "@shared/presentation/components/language-switcher/language-switcher";
 
+const PASSWORD_POLICY_PATTERN = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9\s]).{12,20}$/;
+
 @Component({
   selector: "app-sign-up",
   standalone: true,
@@ -33,8 +35,8 @@ export class SignUpComponent {
       this.errorKey.set("access.errors.required");
       return;
     }
-    if (this.password.length < 8) {
-      this.errorKey.set("access.errors.passwordLength");
+    if (!PASSWORD_POLICY_PATTERN.test(this.password)) {
+      this.errorKey.set("access.errors.passwordPolicy");
       return;
     }
     if (this.password !== this.confirmPassword) {
@@ -55,8 +57,11 @@ export class SignUpComponent {
 
   private toErrorKey(error: unknown): string {
     if (error instanceof HttpErrorResponse) {
-      if (error.status === 409 || error.status === 400) {
+      if (error.status === 409) {
         return "access.errors.usernameTaken";
+      }
+      if (error.status === 400) {
+        return "access.errors.invalidData";
       }
       if (error.status === 0) {
         return "access.errors.network";
