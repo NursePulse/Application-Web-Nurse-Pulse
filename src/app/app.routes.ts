@@ -11,6 +11,8 @@ import { ReportListComponent } from "@report/presentation/views/report-list/repo
 import { AuditLogListComponent } from "@audit/presentation/views/audit-log-list/audit-log-list";
 import { SignInComponent } from "@iam/presentation/views/sign-in/sign-in";
 import { SignUpComponent } from "@iam/presentation/views/sign-up/sign-up";
+import { ForgotPasswordComponent } from "@iam/presentation/views/forgot-password/forgot-password";
+import { VerifyCodeComponent } from "@iam/presentation/views/verify-code/verify-code";
 import { UserManagementComponent } from "@iam/presentation/views/user-management/user-management";
 import { SubscriptionPlansComponent } from "@subscriptions/presentation/views/subscription-plans/subscription-plans";
 import {
@@ -32,6 +34,18 @@ export const routes: Routes = [
     component: SignUpComponent,
     canActivate: [guestGuard],
     data: { titleKey: "access.signUpTitle" },
+  },
+  {
+    path: "forgot-password",
+    component: ForgotPasswordComponent,
+    canActivate: [guestGuard],
+    data: { titleKey: "access.recoveryTitle" },
+  },
+  {
+    path: "verify-code",
+    component: VerifyCodeComponent,
+    canActivate: [guestGuard],
+    data: { titleKey: "access.verificationTitle" },
   },
   {
     path: "",

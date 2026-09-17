@@ -8,5 +8,10 @@ export type ClinicalRegistrationRole = Extract<
 export interface SignUpRequest {
   username: string;
   password: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  age: number;
+  email: string;
   role: ClinicalRegistrationRole;
 }

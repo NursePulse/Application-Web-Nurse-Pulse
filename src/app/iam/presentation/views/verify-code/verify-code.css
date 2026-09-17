@@ -1,0 +1,58 @@
+.verification-page .access-panel {
+    gap: 24px;
+}
+
+.verification-destination {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.verification-destination strong {
+    color: #142033;
+}
+
+.verification-code-field input {
+    letter-spacing: 0.28em;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.verification-resend {
+    border: 0;
+    background: transparent;
+    color: #0f766e;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.verification-resend:disabled {
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.verification-success {
+    display: grid;
+    gap: 12px;
+    max-width: 430px;
+    padding: 18px;
+    border: 1px solid #99f6e4;
+    border-radius: 12px;
+    background: #f0fdfa;
+    color: #115e59;
+}
+
+.verification-success p {
+    color: #286b66;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.verification-success .access-submit {
+    text-align: center;
+    text-decoration: none;
+}

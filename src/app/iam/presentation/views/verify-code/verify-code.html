@@ -1,0 +1,73 @@
+<main class="access-page verification-page">
+    <section class="access-panel">
+        <div class="access-topbar">
+            <div class="brand-mark">
+                <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <rect x="4" y="4" width="24" height="24" rx="4" stroke="currentColor" stroke-width="2" />
+                    <path d="M9 18L14 13L18 17L23 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+            </div>
+            <app-language-switcher></app-language-switcher>
+        </div>
+
+        <div class="access-copy">
+            <span>{{ 'access.eyebrow' | translate }}</span>
+            <h1>{{ 'access.verificationTitle' | translate }}</h1>
+            <p>{{ 'access.verificationSubtitle' | translate }}</p>
+        </div>
+
+        @if (verified()) {
+        <div class="verification-success" role="status">
+            <strong>{{ 'access.verificationSuccessTitle' | translate }}</strong>
+            <p>{{ 'access.verificationSuccessText' | translate }}</p>
+            <a class="access-submit" routerLink="/sign-in">{{ 'access.signIn' | translate }}</a>
+        </div>
+        } @else {
+        <form class="access-form" (ngSubmit)="submit()">
+            <p class="verification-destination">
+                {{ 'access.verificationSentTo' | translate }} <strong>{{ destination }}</strong>
+            </p>
+            <label class="form-field verification-code-field">
+                <span>{{ 'access.verificationCode' | translate }}</span>
+                <input type="text" name="code" [(ngModel)]="code" inputmode="numeric" autocomplete="one-time-code"
+                    maxlength="6" pattern="[0-9]{6}" [placeholder]="'access.verificationCodePlaceholder' | translate"
+                    (input)="sanitizeCode()" required />
+            </label>
+
+            @if (errorKey()) {
+            <p class="access-error" role="alert">{{ errorKey()! | translate }}</p>
+            }
+
+            <button class="access-submit" type="submit" [disabled]="authStore.loading()">
+                @if (authStore.loading()) {
+                <span class="submit-spinner" aria-hidden="true"></span>
+                {{ 'access.verifying' | translate }}
+                } @else {
+                {{ 'access.verify' | translate }}
+                }
+            </button>
+
+            <button class="verification-resend" type="button" [disabled]="secondsLeft > 0 || authStore.loading()"
+                (click)="resend()">
+                @if (secondsLeft > 0) {
+                {{ 'access.resendIn' | translate }} {{ secondsLeft }}s
+                } @else {
+                {{ 'access.resendCode' | translate }}
+                }
+            </button>
+        </form>
+        }
+
+        <p class="access-alt">
+            <a routerLink="/forgot-password">{{ 'access.changeRecoveryData' | translate }}</a>
+        </p>
+    </section>
+
+    <aside class="access-preview">
+        <span class="preview-orb orb-a" aria-hidden="true"></span>
+        <span class="preview-orb orb-b" aria-hidden="true"></span>
+        <span class="preview-scanline" aria-hidden="true"></span>
+        <div class="preview-chip"><span>{{ 'access.verificationPreview' | translate }}</span></div>
+    </aside>
+</main>

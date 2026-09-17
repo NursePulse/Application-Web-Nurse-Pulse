@@ -7,6 +7,10 @@ import { TokenStorage } from "../infrastructure/token.storage";
 import { UserAssembler } from "../infrastructure/user-assembler";
 import { SignInRequest } from "../infrastructure/sign-in.request";
 import { SignUpRequest } from "../infrastructure/sign-up.request";
+import {
+  ForgotPasswordRequest,
+  VerifyCodeRequest,
+} from "../infrastructure/forgot-password.request";
 
 const ROLE_TO_VIEW_MODE: Record<UserRole, ViewMode> = {
   ROLE_ADMIN: "admin",
@@ -47,6 +51,27 @@ export class AuthStore {
     this.loading.set(true);
     return this.api.signUp(request).pipe(
       map((response) => UserAssembler.toEntity(response)),
+      finalize(() => this.loading.set(false)),
+    );
+  }
+
+  requestPasswordRecovery(request: ForgotPasswordRequest) {
+    this.loading.set(true);
+    return this.api.requestPasswordRecovery(request).pipe(
+      finalize(() => this.loading.set(false)),
+    );
+  }
+
+  verifyRecoveryCode(request: VerifyCodeRequest) {
+    this.loading.set(true);
+    return this.api.verifyRecoveryCode(request).pipe(
+      finalize(() => this.loading.set(false)),
+    );
+  }
+
+  resendRecoveryCode(verificationId: string) {
+    this.loading.set(true);
+    return this.api.resendRecoveryCode(verificationId).pipe(
       finalize(() => this.loading.set(false)),
     );
   }

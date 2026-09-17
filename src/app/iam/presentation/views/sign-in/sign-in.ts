@@ -19,6 +19,7 @@ export class SignInComponent {
 
   protected username = "";
   protected password = "";
+  protected showPassword = false;
   protected readonly errorKey = signal<string | null>(null);
 
   protected submit(): void {
