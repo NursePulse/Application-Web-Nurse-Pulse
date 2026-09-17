@@ -175,6 +175,7 @@
   "sbar.formTitle": "Registrar traspaso SBAR",
   "sbar.formSubtitle": "La información queda asociada al paciente y se guarda en auditoría.",
   "sbar.receiver": "Personal receptor *",
+  "sbar.selectReceiver": "Selecciona receptor",
   "sbar.situationField": "S - Situación actual *",
   "sbar.backgroundField": "B - Antecedentes *",
   "sbar.assessmentField": "A - Evaluación *",
@@ -321,6 +322,7 @@
   "sbar.placeholder.assessment": "Indica evaluación clínica, signos, riesgos o interpretación actual.",
   "sbar.placeholder.recommendation": "Indica acciones sugeridas para el siguiente turno.",
   "sbar.validation.patientRequired": "Selecciona el paciente del traspaso.",
+  "sbar.validation.receiverRequired": "Selecciona el personal que recibe el traspaso.",
   "sbar.validation.situation": "Completa la situación actual del paciente.",
   "sbar.validation.background": "Completa los antecedentes relevantes.",
   "sbar.validation.assessment": "Completa la evaluación clínica.",
@@ -421,7 +423,11 @@
   "access.signUp": "Crear cuenta",
   "access.creatingAccount": "Creando cuenta…",
   "access.confirmPassword": "Confirmar contraseña",
+<<<<<<< HEAD
   "access.passwordHint": "Mínimo 10 caracteres, una mayúscula, un número y un carácter especial.",
+=======
+  "access.passwordHint": "12 a 20 caracteres, con al menos una mayúscula y un carácter especial.",
+>>>>>>> 2d6aaceacda4c9f1dc39a70f0c9c65924e084959
   "access.noAccount": "¿No tienes una cuenta?",
   "access.createAccount": "Regístrate",
   "access.haveAccount": "¿Ya tienes una cuenta?",
@@ -429,6 +435,7 @@
   "access.errors.invalidCredentials": "Usuario o contraseña incorrectos.",
   "access.errors.network": "No se pudo conectar con el servidor. Inténtalo de nuevo.",
   "access.errors.generic": "Ocurrió un error inesperado. Inténtalo de nuevo.",
+<<<<<<< HEAD
   "access.errors.passwordLength": "La contraseña debe tener al menos 10 caracteres, una mayúscula, un número y un carácter especial.",
   "access.errors.nameFormat": "El nombre y apellido solo deben contener letras y espacios, con un máximo de 20 caracteres.",
   "access.errors.phoneFormat": "El teléfono debe contener exactamente 9 dígitos.",
@@ -438,13 +445,18 @@
   "access.errors.verificationCode": "Ingresa un código válido de 6 dígitos.",
   "access.errors.verificationInvalid": "El código es incorrecto o ya expiró.",
   "access.errors.verificationAttempts": "Superaste el número de intentos. Solicita un nuevo código más tarde.",
+=======
+  "access.errors.passwordPolicy": "La contraseña debe tener entre 12 y 20 caracteres, con al menos una mayúscula y un carácter especial.",
+>>>>>>> 2d6aaceacda4c9f1dc39a70f0c9c65924e084959
   "access.errors.passwordMismatch": "Las contraseñas no coinciden.",
   "access.errors.usernameTaken": "Ese nombre de usuario no está disponible.",
+  "access.errors.invalidData": "Revisa los datos ingresados. La contraseña debe tener entre 12 y 20 caracteres, con al menos una mayúscula y un carácter especial.",
   "common.subscriptions": "Suscripciones",
   "sidebar.subscriptions": "Suscripciones",
   "subscriptions.eyebrow": "Planes del servicio",
   "subscriptions.title": "Elige el plan para tu institución",
   "subscriptions.subtitle": "Escala NursePulse según el tamaño de tu equipo clínico. Cambia de plan en cualquier momento.",
+  "subscriptions.demoNotice": "Simulación con fines de demostración — no se procesan pagos reales.",
   "subscriptions.popular": "Más elegido",
   "subscriptions.free": "Gratis",
   "subscriptions.perMonth": "/ mes",
@@ -476,6 +488,7 @@
   "checkout.step": "Pago seguro · paso único",
   "checkout.title": "Completa tu suscripción",
   "checkout.subtitle": "Ingresa tus datos para completar la activación de tu plan.",
+  "checkout.demoNotice": "Simulación con fines de demostración — no se procesan pagos reales ni se guardan datos de tarjeta.",
   "checkout.billingDetails": "Datos de facturación",
   "checkout.cardholderName": "Nombre del titular",
   "checkout.cardholderPlaceholder": "Como aparece en la tarjeta",
@@ -532,5 +545,20 @@
   "users.errors.network": "No se pudo conectar con el servidor.",
   "users.errors.generic": "Ocurrió un error al actualizar el rol.",
   "events.errors.load": "No se pudieron cargar los eventos clínicos.",
+<<<<<<< HEAD
   "events.errors.save": "No se pudo registrar el evento clínico. Inténtalo de nuevo."
 }
+=======
+  "events.errors.save": "No se pudo registrar el evento clínico. Inténtalo de nuevo.",
+  "patients.errors.load": "No se pudieron cargar los pacientes.",
+  "patients.errors.save": "No se pudo guardar el paciente. Verifica los datos e inténtalo de nuevo.",
+  "patients.errors.delete": "No se pudo eliminar el paciente. Inténtalo de nuevo.",
+  "vitals.errors.load": "No se pudieron cargar los signos vitales.",
+  "vitals.errors.save": "No se pudo registrar el signo vital. Inténtalo de nuevo.",
+  "sbar.errors.load": "No se pudieron cargar los traspasos SBAR.",
+  "sbar.errors.save": "No se pudo registrar el traspaso SBAR. Inténtalo de nuevo.",
+  "sbar.errors.acknowledge": "No se pudo confirmar la recepción del traspaso. Inténtalo de nuevo.",
+  "alerts.errors.load": "No se pudieron cargar las alertas.",
+  "alerts.errors.save": "No se pudo crear la alerta. Inténtalo de nuevo."
+}
+>>>>>>> 2d6aaceacda4c9f1dc39a70f0c9c65924e084959

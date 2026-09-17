@@ -42,8 +42,7 @@ export class VitalSignListComponent implements OnInit {
     this.errorMessage.set(this.validateForm());
     if (this.errorMessage()) return;
 
-    this.store.recordVitalSign(this.form);
-    this.cancelForm();
+    this.store.recordVitalSign(this.form, () => this.cancelForm());
   }
 
   private emptyForm() {

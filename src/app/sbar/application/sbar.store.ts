@@ -8,8 +8,7 @@ import { PatientApiEndpoint } from "@patient/infrastructure/patient-api-endpoint
 import { PatientAssembler } from "@patient/infrastructure/patient-assembler";
 import { AuditStore } from "@audit/application/audit.store";
 import { AuditAction } from "@audit/domain/model/audit-log.entity";
-
-const DEFAULT_ACTOR = "Equipo clínico";
+import { UsersStore } from "@iam/application/users.store";
 
 export interface SbarForm {
   patientId: string;
@@ -26,11 +25,14 @@ export class SbarStore {
   private readonly patientApi = inject(PatientApiEndpoint);
   private readonly patients = inject(PatientStore);
   private readonly audit = inject(AuditStore);
+  private readonly users = inject(UsersStore);
 
   private readonly _transfers = signal<SbarTransfer[]>([]);
   readonly transfers = this._transfers.asReadonly();
+  readonly errorKey = signal<string | null>(null);
 
   loadTransfers(): void {
+    this.errorKey.set(null);
     this.patientApi
       .getAll()
       .pipe(
@@ -50,6 +52,7 @@ export class SbarStore {
                       (id) =>
                         patients.find((p) => p.id === id)?.fullName ??
                         `Paciente #${id}`,
+                      (id) => this.resolveReceiverName(id),
                     ),
                   ),
                 ),
@@ -57,16 +60,20 @@ export class SbarStore {
           ).pipe(map((groups) => groups.flat()));
         }),
       )
-      .subscribe((transfers) => {
-        this._transfers.set(
-          transfers.sort(
-            (a, b) => b.transferredAt.getTime() - a.transferredAt.getTime(),
-          ),
-        );
+      .subscribe({
+        next: (transfers) => {
+          this._transfers.set(
+            transfers.sort(
+              (a, b) => b.transferredAt.getTime() - a.transferredAt.getTime(),
+            ),
+          );
+        },
+        error: () => this.errorKey.set("sbar.errors.load"),
       });
   }
 
-  registerTransfer(form: SbarForm): void {
+  registerTransfer(form: SbarForm, onSuccess?: () => void): void {
+    this.errorKey.set(null);
     const patient = this.patients
       .patients()
       .find((p) => p.id === form.patientId);
@@ -75,14 +82,13 @@ export class SbarStore {
     const request = {
       patientId: Number(form.patientId),
       title: `SBAR - ${patient?.fullName ?? "Paciente"}`,
-      description: SbarAssembler.buildDescription(
-        form.targetNurseId,
-        receiverName,
-        form.situation,
-        form.background,
-        form.assessment,
-        form.recommendation,
-      ),
+      situation: form.situation,
+      background: form.background,
+      assessment: form.assessment,
+      recommendation: form.recommendation,
+      targetNurseId: form.targetNurseId
+        ? Number(form.targetNurseId)
+        : undefined,
     };
 
     this.api
@@ -96,38 +102,53 @@ export class SbarStore {
           return of(created);
         }),
       )
-      .subscribe((created) => {
-        const transfer = SbarAssembler.toEntity(created, patient?.fullName);
-        this._transfers.update((list) => [transfer, ...list]);
-        this.audit.register(
-          AuditAction.SBAR_TRANSFER,
-          `Registró traspaso SBAR para ${transfer.patientName} enviado a ${receiverName} por ${DEFAULT_ACTOR}`,
-        );
+      .subscribe({
+        next: (created) => {
+          const transfer = SbarAssembler.toEntity(
+            created,
+            patient?.fullName,
+            receiverName,
+          );
+          this._transfers.update((list) => [transfer, ...list]);
+          this.audit.register(
+            AuditAction.SBAR_TRANSFER,
+            `Registró traspaso SBAR para ${transfer.patientName} enviado a ${receiverName}`,
+          );
+          onSuccess?.();
+        },
+        error: () => this.errorKey.set("sbar.errors.save"),
       });
   }
 
   acknowledgeTransfer(
     transferId: string,
-    incomingNurseId: string,
     notes = "Traspaso SBAR revisado y atendido.",
+    onSuccess?: () => void,
   ): void {
+    this.errorKey.set(null);
     this.api
       .acknowledge(transferId, {
-        incomingNurseId: Number(incomingNurseId),
         additionalNotes: notes,
       })
-      .subscribe((updated) => {
-        const transfer = SbarAssembler.toEntity(
-          updated,
-          this.resolvePatientName(String(updated.patientId)),
-        );
-        this._transfers.update((list) =>
-          list.map((item) => (item.id === transfer.id ? transfer : item)),
-        );
-        this.audit.register(
-          AuditAction.SBAR_TRANSFER,
-          `Atendió traspaso SBAR para ${transfer.patientName}`,
-        );
+      .subscribe({
+        next: (updated) => {
+          const transfer = SbarAssembler.toEntity(
+            updated,
+            this.resolvePatientName(String(updated.patientId)),
+            updated.targetNurseId != null
+              ? this.resolveReceiverName(String(updated.targetNurseId))
+              : undefined,
+          );
+          this._transfers.update((list) =>
+            list.map((item) => (item.id === transfer.id ? transfer : item)),
+          );
+          this.audit.register(
+            AuditAction.SBAR_TRANSFER,
+            `Atendió traspaso SBAR para ${transfer.patientName}`,
+          );
+          onSuccess?.();
+        },
+        error: () => this.errorKey.set("sbar.errors.acknowledge"),
       });
   }
 
@@ -139,12 +160,9 @@ export class SbarStore {
   }
 
   private resolveReceiverName(id: string): string {
-    const names: Record<string, string> = {
-      "2": "Enfermero Luis",
-      "3": "Enfermera Laura",
-      "4": "Enfermera Claudia",
-    };
-
-    return names[id] ?? `Enfermero #${id}`;
+    return (
+      this.users.users().find((user) => user.id === id)?.username ??
+      `Enfermero #${id}`
+    );
   }
 }
