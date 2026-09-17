@@ -63,7 +63,6 @@ export class SignUpComponent {
       this.errorKey.set("access.errors.required");
       return;
     }
-<<<<<<< HEAD
     if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]{1,20}$/.test(firstName) ||
       !/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]{1,20}$/.test(lastName)) {
       this.errorKey.set("access.errors.nameFormat");
@@ -73,12 +72,8 @@ export class SignUpComponent {
       this.errorKey.set("access.errors.phoneFormat");
       return;
     }
-    if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s]).{10,}$/.test(this.password)) {
+    if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s]).{12,20}$/.test(this.password)) {
       this.errorKey.set("access.errors.passwordLength");
-=======
-    if (!PASSWORD_POLICY_PATTERN.test(this.password)) {
-      this.errorKey.set("access.errors.passwordPolicy");
->>>>>>> 2d6aaceacda4c9f1dc39a70f0c9c65924e084959
       return;
     }
     if (this.password !== this.confirmPassword) {

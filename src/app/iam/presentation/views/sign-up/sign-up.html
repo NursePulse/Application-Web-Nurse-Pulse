@@ -111,8 +111,8 @@
         <span>{{ 'access.password' | translate }}</span>
         <div class="password-field">
           <input [type]="showPassword ? 'text' : 'password'" name="password" [(ngModel)]="password"
-            [placeholder]="'access.passwordPlaceholder' | translate" autocomplete="new-password" minlength="10"
-            pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\\s]).{10,}" required />
+            [placeholder]="'access.passwordPlaceholder' | translate" autocomplete="new-password" minlength="12"
+            pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\\s]).{12,20}" required />
           <button class="password-toggle" type="button"
             [attr.aria-label]="(showPassword ? 'access.hidePassword' : 'access.showPassword') | translate"
             [attr.title]="(showPassword ? 'access.hidePassword' : 'access.showPassword') | translate"
@@ -137,8 +137,8 @@
         <span>{{ 'access.confirmPassword' | translate }}</span>
         <div class="password-field">
           <input [type]="showConfirmPassword ? 'text' : 'password'" name="confirmPassword" [(ngModel)]="confirmPassword"
-            [placeholder]="'access.passwordPlaceholder' | translate" autocomplete="new-password" minlength="10"
-            pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\\s]).{10,}" required />
+            [placeholder]="'access.passwordPlaceholder' | translate" autocomplete="new-password" minlength="12"
+            pattern="(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\\s]).{12,20}" required />
           <button class="password-toggle" type="button"
             [attr.aria-label]="(showConfirmPassword ? 'access.hidePassword' : 'access.showPassword') | translate"
             [attr.title]="(showConfirmPassword ? 'access.hidePassword' : 'access.showPassword') | translate"

@@ -423,11 +423,7 @@
   "access.signUp": "Create account",
   "access.creatingAccount": "Creating account…",
   "access.confirmPassword": "Confirm password",
-<<<<<<< HEAD
-  "access.passwordHint": "At least 10 characters, one uppercase letter, one number, and one special character.",
-=======
-  "access.passwordHint": "12 to 20 characters, with at least one uppercase letter and one special character.",
->>>>>>> 2d6aaceacda4c9f1dc39a70f0c9c65924e084959
+  "access.passwordHint": "12 to 20 characters, with at least one uppercase letter, one number, and one special character.",
   "access.noAccount": "Don't have an account?",
   "access.createAccount": "Sign up",
   "access.haveAccount": "Already have an account?",
@@ -435,8 +431,7 @@
   "access.errors.invalidCredentials": "Incorrect username or password.",
   "access.errors.network": "Could not reach the server. Please try again.",
   "access.errors.generic": "An unexpected error occurred. Please try again.",
-<<<<<<< HEAD
-  "access.errors.passwordLength": "The password must contain at least 10 characters, one uppercase letter, one number, and one special character.",
+  "access.errors.passwordLength": "The password must contain 12 to 20 characters, one uppercase letter, one number, and one special character.",
   "access.errors.nameFormat": "First and last names may contain only letters and spaces, with a maximum of 20 characters.",
   "access.errors.phoneFormat": "The phone number must contain exactly 9 digits.",
   "access.errors.recoveryRequired": "Enter your email or phone number to continue.",
@@ -445,9 +440,6 @@
   "access.errors.verificationCode": "Enter a valid 6-digit code.",
   "access.errors.verificationInvalid": "The code is incorrect or has expired.",
   "access.errors.verificationAttempts": "Too many attempts. Request a new code later.",
-=======
-  "access.errors.passwordPolicy": "The password must be 12 to 20 characters long, with at least one uppercase letter and one special character.",
->>>>>>> 2d6aaceacda4c9f1dc39a70f0c9c65924e084959
   "access.errors.passwordMismatch": "Passwords do not match.",
   "access.errors.usernameTaken": "That username is not available.",
   "access.errors.invalidData": "Please check the entered data. The password must be 12 to 20 characters long, with at least one uppercase letter and one special character.",
@@ -550,15 +542,15 @@
 }
 =======
   "events.errors.save": "The clinical event could not be registered. Please try again.",
-  "patients.errors.load": "Patients could not be loaded.",
-  "patients.errors.save": "The patient could not be saved. Check the data and try again.",
-  "patients.errors.delete": "The patient could not be deleted. Please try again.",
-  "vitals.errors.load": "Vital signs could not be loaded.",
-  "vitals.errors.save": "The vital sign could not be registered. Please try again.",
-  "sbar.errors.load": "SBAR handovers could not be loaded.",
-  "sbar.errors.save": "The SBAR handover could not be registered. Please try again.",
-  "sbar.errors.acknowledge": "The handover acknowledgement could not be saved. Please try again.",
-  "alerts.errors.load": "Alerts could not be loaded.",
-  "alerts.errors.save": "The alert could not be created. Please try again."
+"patients.errors.load": "Patients could not be loaded.",
+"patients.errors.save": "The patient could not be saved. Check the data and try again.",
+"patients.errors.delete": "The patient could not be deleted. Please try again.",
+"vitals.errors.load": "Vital signs could not be loaded.",
+"vitals.errors.save": "The vital sign could not be registered. Please try again.",
+"sbar.errors.load": "SBAR handovers could not be loaded.",
+"sbar.errors.save": "The SBAR handover could not be registered. Please try again.",
+"sbar.errors.acknowledge": "The handover acknowledgement could not be saved. Please try again.",
+"alerts.errors.load": "Alerts could not be loaded.",
+"alerts.errors.save": "The alert could not be created. Please try again."
 }
 >>>>>>> 2d6aaceacda4c9f1dc39a70f0c9c65924e084959
