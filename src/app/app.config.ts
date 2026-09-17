@@ -6,6 +6,7 @@ import {
 } from "@angular/core";
 import { provideRouter } from "@angular/router";
 import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { catchError, of } from "rxjs";
 import { authInterceptor } from "@iam/infrastructure/auth.interceptor";
 import { provideTranslateService, TranslateService } from "@ngx-translate/core";
 import { provideTranslateHttpLoader } from "@ngx-translate/http-loader";
@@ -20,12 +21,17 @@ function getStoredLanguage(): AppLanguage {
   return stored === "en" || stored === "es" ? stored : "es";
 }
 
-function initializeLanguage(): void {
+function initializeLanguage() {
   const translate = inject(TranslateService);
   const language = getStoredLanguage();
   translate.addLangs(["es", "en"]);
-  translate.use(language);
   document.documentElement.lang = language;
+  return translate.use(language).pipe(
+    catchError((error: unknown) => {
+      console.error("Could not load the selected language.", error);
+      return of(null);
+    }),
+  );
 }
 
 export const appConfig: ApplicationConfig = {
@@ -35,7 +41,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideTranslateService({
       loader: provideTranslateHttpLoader({
-        prefix: "./i18n/",
+        prefix: "i18n/",
         suffix: ".json",
       }),
       fallbackLang: "es",

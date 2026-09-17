@@ -205,6 +205,10 @@
 }
 
 @media (max-width: 440px) {
+  .form-fields-row {
+    grid-template-columns: 1fr;
+  }
+
   .role-options {
     grid-template-columns: 1fr;
   }

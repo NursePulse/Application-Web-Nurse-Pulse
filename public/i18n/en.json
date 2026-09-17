@@ -537,20 +537,15 @@
   "users.errors.network": "Could not reach the server.",
   "users.errors.generic": "An error occurred while updating the role.",
   "events.errors.load": "Clinical events could not be loaded.",
-<<<<<<< HEAD
-  "events.errors.save": "The clinical event could not be registered. Please try again."
-}
-=======
   "events.errors.save": "The clinical event could not be registered. Please try again.",
-"patients.errors.load": "Patients could not be loaded.",
-"patients.errors.save": "The patient could not be saved. Check the data and try again.",
-"patients.errors.delete": "The patient could not be deleted. Please try again.",
-"vitals.errors.load": "Vital signs could not be loaded.",
-"vitals.errors.save": "The vital sign could not be registered. Please try again.",
-"sbar.errors.load": "SBAR handovers could not be loaded.",
-"sbar.errors.save": "The SBAR handover could not be registered. Please try again.",
-"sbar.errors.acknowledge": "The handover acknowledgement could not be saved. Please try again.",
-"alerts.errors.load": "Alerts could not be loaded.",
-"alerts.errors.save": "The alert could not be created. Please try again."
+  "patients.errors.load": "Patients could not be loaded.",
+  "patients.errors.save": "The patient could not be saved. Check the data and try again.",
+  "patients.errors.delete": "The patient could not be deleted. Please try again.",
+  "vitals.errors.load": "Vital signs could not be loaded.",
+  "vitals.errors.save": "The vital sign could not be registered. Please try again.",
+  "sbar.errors.load": "SBAR handovers could not be loaded.",
+  "sbar.errors.save": "The SBAR handover could not be registered. Please try again.",
+  "sbar.errors.acknowledge": "The handover acknowledgement could not be saved. Please try again.",
+  "alerts.errors.load": "Alerts could not be loaded.",
+  "alerts.errors.save": "The alert could not be created. Please try again."
 }
->>>>>>> 2d6aaceacda4c9f1dc39a70f0c9c65924e084959

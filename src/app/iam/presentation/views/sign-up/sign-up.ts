@@ -8,7 +8,7 @@ import { AuthStore } from "../../../application/auth.store";
 import { ClinicalRegistrationRole } from "../../../infrastructure/sign-up.request";
 import { LanguageSwitcherComponent } from "@shared/presentation/components/language-switcher/language-switcher";
 
-const PASSWORD_POLICY_PATTERN = /^(?=.*[A-Z])(?=.*[^A-Za-z0-9\s]).{12,20}$/;
+const PASSWORD_POLICY_PATTERN = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{12,20}$/;
 
 @Component({
   selector: "app-sign-up",
@@ -72,7 +72,7 @@ export class SignUpComponent {
       this.errorKey.set("access.errors.phoneFormat");
       return;
     }
-    if (!/^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d\s]).{12,20}$/.test(this.password)) {
+    if (!PASSWORD_POLICY_PATTERN.test(this.password)) {
       this.errorKey.set("access.errors.passwordLength");
       return;
     }

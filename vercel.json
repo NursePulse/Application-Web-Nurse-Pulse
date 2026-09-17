@@ -1,10 +1,361 @@
-{
+Necesito validar y corregir ÚNICAMENTE el funcionamiento del frontend Angular en LOCALHOST del proyecto NursePulse.
+
+OBJETIVO PRINCIPAL:
+Quiero que el frontend funcione correctamente en localhost y que no dependa de Vercel para ejecutarse o comunicarse con el backend.
+
+IMPORTANTE:
+- NO hagas cambios en Vercel.
+- NO hagas deploy.
+- NO modifiques configuraciones de producción sin antes explicarme el motivo.
+- NO cambies la arquitectura del proyecto.
+- NO reemplaces componentes existentes innecesariamente.
+- NO cambies la lógica de autenticación si no es necesario.
+- Primero diagnostica, luego corrige únicamente lo necesario.
+- Mantén la conexión con el backend existente.
+- No agregues Twilio todavía.
+- No elimines funcionalidades existentes.
+
+1. REVISAR CONFIGURACIÓN DEL FRONTEND
+
+Inspecciona:
+
+- package.json
+- angular.json
+- src/environments/
+- environment.ts
+- environment.development.ts
+- environment.prod.ts
+- app.config.ts
+- archivos de configuración relacionados con API
+- servicios HTTP
+- interceptores
+- configuración de autenticación
+
+Busca específicamente:
+
+- localhost
+- localhost: 8080
+- Vercel
+- *.vercel.app
+- API_BASE_URL
+- apiUrl
+- environment
+- URLs hardcodeadas
+
+Determina exactamente qué URL utiliza actualmente Angular cuando se ejecuta en localhost.
+
+Quiero que informes:
+
+LOCALHOST:
+Frontend → ¿qué URL utiliza?
+Backend → ¿qué URL utiliza?
+
+VERCEL:
+Frontend → ¿qué URL utiliza?
+Backend → ¿qué URL utiliza?
+
+No cambies nada todavía si no es necesario.
+
+2. VALIDAR LA CONEXIÓN LOCAL
+
+Ejecuta el frontend en localhost utilizando la configuración de desarrollo existente.
+
+Debe poder comunicarse con:
+
+http: //localhost:8080
+
+Verifica especialmente:
+
+POST /api/v1/authentication/sign-up
+POST /api/v1/authentication/sign-in
+
+Comprueba en Network del navegador:
+
+- Request URL
+- Request Method
+- Status Code
+- Request Headers
+- Response
+- errores CORS
+- preflight OPTIONS
+
+El objetivo es que localhost NO haga llamadas accidentalmente a Vercel.
+
+3. VALIDAR EL LOGIN VISUAL
+
+Actualmente la pantalla de login presenta un problema visual similar al mostrado en la captura:
+
+- Los inputs aparecen pero no se visualizan correctamente los textos.
+- El botón aparece sin texto visible.
+- Hay demasiado espacio vacío en la parte superior.
+- Debe comprobarse si los labels/placeholders están ocultos.
+- Debe comprobarse si existe un problema de color CSS.
+- Debe comprobarse si las traducciones no están cargando.
+- Debe comprobarse si algún elemento tiene opacity, visibility, display, color o z-index incorrecto.
+
+Revisa específicamente:
+
+src/app/iam/presentation/views/sign-in/
+
+y sus archivos:
+
+- sign-in.ts
+- sign-in.html
+- sign-in.scss
+
+También revisa componentes compartidos que utilice el login.
+
+NO cambies el diseño general de NursePulse.
+
+Solo corrige los errores que impidan visualizar correctamente:
+
+- logo
+- título
+- subtítulo
+- labels
+- username
+- password
+- placeholder
+- botón
+- enlace de recuperación
+- enlace de registro
+- mensajes de error
+- icono de mostrar/ocultar contraseña
+
+4. VALIDAR TRADUCCIONES
+
+Determina si los textos invisibles se deben a traducciones.
+
+Busca:
+
+- archivos de traducción
+- claves utilizadas por sign-in
+- configuración de i18n
+- traducciones faltantes
+- claves incorrectas
+
+Si una clave existe pero no se está cargando correctamente, corrige la configuración mínima necesaria.
+
+No reemplaces todo el sistema de traducciones.
+
+5. VALIDAR CSS
+
+Revisa si existen reglas como:
+
+color: white;
+opacity: 0;
+visibility: hidden;
+display: none;
+font-size: 0;
+text-indent;
+z-index;
+background-color;
+-webkit-text-fill-color;
+
+que puedan provocar que el contenido sea invisible.
+
+Comprueba especialmente:
+
+- color del texto sobre fondo blanco
+- color de placeholder
+- color de labels
+- color del texto del botón
+- estados disabled
+- focus
+- hover
+
+6. VALIDAR RESPONSIVE Y POSICIONAMIENTO
+
+La pantalla debe verse correctamente en una resolución de escritorio normal.
+
+Revisa:
+
+- margin
+- padding
+- height
+- min-height
+- align-items
+- justify-content
+- position
+- overflow
+
+El formulario no debe quedar excesivamente desplazado hacia abajo.
+
+No rediseñes la página; solamente corrige errores de posicionamiento si realmente existen.
+
+7. VALIDAR AUTENTICACIÓN
+
+Después de corregir el frontend visual, prueba:
+
+REGISTRO:
+
+POST /api/v1/authentication/sign-up
+
+LOGIN:
+
+POST /api/v1/authentication/sign-in
+
+Comprueba que Angular envía los campos que actualmente espera el backend.
+
+No inventes nombres de campos.
+
+Verifica que los datos enviados coincidan exactamente con el DTO/Resource del backend.
+
+8. VALIDAR JWT
+
+Después de iniciar sesión correctamente:
+
+- comprobar que el backend devuelve el token esperado
+- comprobar que Angular lo almacena correctamente
+- comprobar que el interceptor lo envía cuando corresponde
+- comprobar que las peticiones protegidas incluyen Authorization
+- comprobar que cerrar sesión elimina correctamente la sesión
+
+No cambies el mecanismo JWT existente salvo que encuentres un error real.
+
+9. VALIDAR CORS
+
+Desde localhost debe funcionar la comunicación con el backend.
+
+Comprueba el preflight OPTIONS y el POST real.
+
+El origen esperado será el puerto donde Angular esté ejecutándose, por ejemplo:
+
+http: //localhost:4200
+
+Si Angular utiliza otro puerto, usa el puerto real.
+
+No habilites:
+
+Access-Control-Allow-Origin: *
+
+como solución genérica.
+
+Configura solamente los orígenes necesarios para desarrollo local si realmente corresponde modificar CORS.
+
+10. VALIDAR VERCEL SIN MODIFICARLO
+
+Después de terminar la validación local, SOLO INSPECCIONA la configuración relacionada con Vercel.
+
+Determina si Vercel utiliza:
+
+- otra API URL
+- variables de entorno
+- environment.prod.ts
+- configuración diferente de API
+- otro backend
+- otra configuración CORS
+
+NO hagas deploy.
+
+NO cambies variables de Vercel.
+
+NO cambies producción.
+
+Solo informa qué habría que revisar posteriormente para validar Vercel.
+
+11. PRUEBAS OBLIGATORIAS
+
+Realiza y documenta:
+
+A. Frontend carga correctamente en localhost.
+B. Login visual correcto.
+C. Registro visual correcto.
+D. Sign-up llega al backend.
+E. Sign-in llega al backend.
+F. Backend responde correctamente.
+G. JWT funciona.
+H. Endpoint protegido funciona con JWT.
+I. Endpoint protegido rechaza petición sin JWT.
+J. CORS funciona desde localhost.
+K. No existen llamadas accidentales hacia Vercel durante el desarrollo local.
+L. No existen errores críticos en Console.
+M. No existen errores críticos en Network.
+
+12. RESULTADO FINAL
+
+Al terminar, dame un informe con este formato:
+
+=== CONFIGURACIÓN LOCAL ===
+
+Frontend:
+URL:
+Estado:
+
+Backend:
+URL:
+Estado:
+
+API utilizada:
+URL:
+
+=== LOGIN ===
+
+Visual:
+Estado:
+
+Sign-in:
+Estado:
+
+JWT:
+Estado:
+
+=== REGISTRO ===
+
+Sign-up:
+Estado:
+
+Persistencia:
+Estado:
+
+=== CORS ===
+
+Preflight:
+Estado:
+
+POST:
+Estado:
+
+=== VERCEL ===
+
+Configuración encontrada:
+Dependencias de producción:
+Problemas detectados:
+Cambios necesarios posteriormente:
+
+=== ARCHIVOS MODIFICADOS ===
+
+Lista exacta de archivos modificados y qué se cambió en cada uno.
+
+=== PROBLEMAS ENCONTRADOS ===
+
+Lista de problemas encontrados.
+
+=== PRUEBAS ===
+
+Lista de pruebas realizadas con resultado PASS/FAIL.
+
+CONDICIÓN FINAL:
+
+No consideres terminada la tarea simplemente porque Angular compile.
+
+La condición de éxito es:
+
+Angular localhost
+    ↓
+Backend localhost: 8080
+    ↓
+MySQL
+
+y que el login y registro funcionen correctamente desde la interfaz.
+
+Vercel debe quedar intacto.{
   "buildCommand": "npm run build",
   "outputDirectory": "dist/FrontNursePulse/browser",
   "installCommand": "npm ci --omit=dev",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!i18n/).*)",
       "destination": "/index.html"
     }
   ]

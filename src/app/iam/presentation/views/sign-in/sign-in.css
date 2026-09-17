@@ -114,7 +114,7 @@
 }
 
 .password-field input {
-  padding-right: 92px;
+  padding-right: 54px;
 }
 
 .password-toggle {
@@ -717,6 +717,21 @@
 
   .access-preview {
     display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .access-panel {
+    justify-content: flex-start;
+    padding: 92px 22px 32px;
+  }
+
+  .access-copy h1 {
+    font-size: 36px;
+  }
+
+  .access-form {
+    width: 100%;
   }
 }
 
