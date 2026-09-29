@@ -8,6 +8,13 @@
     <div class="hero-pill">
       {{ store.logs().length }} {{ 'audit.movements' | translate }}
     </div>
+    <button
+      class="btn-secondary"
+      (click)="store.exportPdf()"
+      [disabled]="store.exportingPdf()"
+    >
+      {{ store.exportingPdf() ? ('audit.exporting' | translate) : ('audit.exportPdf' | translate) }}
+    </button>
   </div>
 
   <div class="card">

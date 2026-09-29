@@ -233,6 +233,8 @@
   "audit.movements": "movements",
   "audit.dateTime": "Date and time",
   "audit.empty": "There are no audit movements to display.",
+  "audit.exportPdf": "Export PDF",
+  "audit.exporting": "Generating...",
   "notifications.panelTitle": "Alerts center",
   "notifications.pending": "pending",
   "notifications.emptyTitle": "No pending alerts",

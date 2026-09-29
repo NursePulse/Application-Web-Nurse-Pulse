@@ -29,4 +29,8 @@ export class AuditApiEndpoint {
   create(request: CreateAuditLogRequest): Observable<AuditLogResponse> {
     return this.http.post<AuditLogResponse>(this.baseUrl, request);
   }
+
+  exportPdf(): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/export/pdf`, { responseType: "blob" });
+  }
 }

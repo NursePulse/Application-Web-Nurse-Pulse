@@ -24,6 +24,7 @@ export class AuditStore {
 
   private readonly _logs = signal<AuditLog[]>([]);
   readonly logs = this._logs.asReadonly();
+  readonly exportingPdf = signal(false);
 
   loadLogs(): void {
     // Backend restricts audit reads to doctors and administrators.
@@ -34,6 +35,23 @@ export class AuditStore {
       );
 
       this._logs.set(logs);
+    });
+  }
+
+  exportPdf(): void {
+    if (!this.authStore.hasAnyRole(["ROLE_DOCTOR", "ROLE_ADMIN"])) return;
+    this.exportingPdf.set(true);
+    this.api.exportPdf().subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "auditoria-nursepulse.pdf";
+        link.click();
+        URL.revokeObjectURL(url);
+        this.exportingPdf.set(false);
+      },
+      error: () => this.exportingPdf.set(false),
     });
   }
 
