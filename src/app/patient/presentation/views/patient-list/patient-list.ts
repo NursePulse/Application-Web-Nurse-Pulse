@@ -3,6 +3,7 @@ import { FormsModule } from "@angular/forms";
 import { PatientStore } from "../../../application/patient.store";
 import { Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
+import { AuthStore } from "@iam/application/auth.store";
 import {
   Patient,
   PatientStatusEnum,
@@ -18,6 +19,17 @@ import {
 export class PatientListComponent implements OnInit {
   protected store = inject(PatientStore);
   private router = inject(Router);
+  private authStore = inject(AuthStore);
+
+  /** Only nurses and admins can admit a new patient; doctors can view/update only. */
+  protected canCreatePatient(): boolean {
+    return this.authStore.hasAnyRole(["ROLE_NURSE", "ROLE_ADMIN"]);
+  }
+
+  /** Only admins can permanently delete a patient record. */
+  protected canDeletePatient(): boolean {
+    return this.authStore.hasAnyRole(["ROLE_ADMIN"]);
+  }
 
   activeMenu = signal<string | null>(null);
   showForm = signal(false);
@@ -84,6 +96,7 @@ export class PatientListComponent implements OnInit {
   }
 
   openCreateForm(): void {
+    if (!this.canCreatePatient()) return;
     this.errorMessage.set(null);
     this.editingPatientId.set(null);
     this.form = this.emptyForm();
@@ -134,6 +147,7 @@ export class PatientListComponent implements OnInit {
   }
 
   deletePatient(patientId: string): void {
+    if (!this.canDeletePatient()) return;
     this.closeMenu();
 
     const confirmed = confirm("¿Seguro que deseas eliminar este paciente?");
@@ -146,6 +160,11 @@ export class PatientListComponent implements OnInit {
     this.errorMessage.set(null);
 
     const editingId = this.editingPatientId();
+
+    if (!editingId && !this.canCreatePatient()) {
+      this.errorMessage.set("No tienes permiso para admitir pacientes.");
+      return;
+    }
 
     const documentExists = this.store
       .patients()

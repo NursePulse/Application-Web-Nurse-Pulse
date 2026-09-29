@@ -6,9 +6,11 @@
       <p>{{ 'sbar.subtitle' | translate }}</p>
     </div>
 
+    @if (canManageHandovers()) {
     <button class="btn-primary" (click)="openForm()">
       {{ 'sbar.register' | translate }}
     </button>
+    }
   </div>
 
   @if (store.errorKey()) {
@@ -151,7 +153,7 @@
       <strong>{{ 'sbar.additionalNotes' | translate }}</strong>
       <p>{{ t.additionalNotes }}</p>
     </div>
-    } @if (t.canAcknowledge) {
+    } @if (t.canAcknowledge && canManageHandovers()) {
     <div class="sbar-actions">
       <button
         class="btn-secondary"

@@ -41,7 +41,13 @@ export class SbarListComponent implements OnInit {
       );
   }
 
+  /** Only nurses and admins can create or acknowledge a handover; doctors can only view. */
+  protected canManageHandovers(): boolean {
+    return this.authStore.hasAnyRole(["ROLE_NURSE", "ROLE_ADMIN"]);
+  }
+
   openForm(): void {
+    if (!this.canManageHandovers()) return;
     this.errorMessage.set(null);
     this.form = this.emptyForm();
     this.showForm.set(true);
@@ -53,6 +59,10 @@ export class SbarListComponent implements OnInit {
   }
 
   save(): void {
+    if (!this.canManageHandovers()) {
+      this.errorMessage.set("No tienes permiso para registrar traspasos.");
+      return;
+    }
     this.errorMessage.set(this.validateForm());
     if (this.errorMessage()) return;
 
@@ -69,6 +79,7 @@ export class SbarListComponent implements OnInit {
   }
 
   acknowledge(id: string): void {
+    if (!this.canManageHandovers()) return;
     this.store.acknowledgeTransfer(id);
   }
 

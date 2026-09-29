@@ -1,9 +1,11 @@
 <div class="view-container">
   <div class="view-header">
     <h2>{{ 'vitals.title' | translate }}</h2>
+    @if (canRecordVitalSigns()) {
     <button class="btn-primary" (click)="openForm()">
       + {{ 'vitals.register' | translate }}
     </button>
+    }
   </div>
 
   @if (store.errorKey()) {

@@ -3,6 +3,7 @@ import { DatePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { VitalSignStore } from "../../../application/vital-sign.store";
 import { PatientStore } from "@patient/application/patient.store";
+import { AuthStore } from "@iam/application/auth.store";
 import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -15,6 +16,7 @@ import { TranslatePipe, TranslateService } from "@ngx-translate/core";
 export class VitalSignListComponent implements OnInit {
   protected store = inject(VitalSignStore);
   protected patientStore = inject(PatientStore);
+  private authStore = inject(AuthStore);
   private translate = inject(TranslateService);
 
   showForm = signal(false);
@@ -27,7 +29,13 @@ export class VitalSignListComponent implements OnInit {
     this.store.loadVitalSigns();
   }
 
+  /** Only nurses and admins can record vital signs; doctors can only view. */
+  protected canRecordVitalSigns(): boolean {
+    return this.authStore.hasAnyRole(["ROLE_NURSE", "ROLE_ADMIN"]);
+  }
+
   openForm(): void {
+    if (!this.canRecordVitalSigns()) return;
     this.errorMessage.set(null);
     this.form = this.emptyForm();
     this.showForm.set(true);
@@ -39,6 +47,10 @@ export class VitalSignListComponent implements OnInit {
   }
 
   save(): void {
+    if (!this.canRecordVitalSigns()) {
+      this.errorMessage.set("No tienes permiso para registrar signos vitales.");
+      return;
+    }
     this.errorMessage.set(this.validateForm());
     if (this.errorMessage()) return;
 

@@ -5,9 +5,11 @@
       <h2>{{ 'patients.title' | translate }}</h2>
       <p>{{ 'patients.subtitle' | translate }}</p>
     </div>
+    @if (canCreatePatient()) {
     <button class="btn-primary" (click)="openCreateForm()">
       {{ 'patients.new' | translate }}
     </button>
+    }
   </div>
 
   @if (store.errorKey()) {
@@ -235,12 +237,14 @@
               <button class="action-menu-item" (click)="dischargePatient(p.id)">
                 {{ 'patients.discharge' | translate }}
               </button>
+              @if (canDeletePatient()) {
               <button
                 class="action-menu-item danger"
                 (click)="deletePatient(p.id)"
               >
                 Eliminar paciente
               </button>
+              }
             </div>
             }
           </td>
