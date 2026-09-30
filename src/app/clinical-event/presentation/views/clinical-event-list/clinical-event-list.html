@@ -52,14 +52,16 @@
           name="title"
           [(ngModel)]="form.title"
           placeholder="Ej. Saturación baja durante monitoreo"
+          maxlength="120"
           required
       /></label>
       <label class="form-field span-2"
-        ><span>{{ 'events.description' | translate }}</span
+        ><span>{{ 'events.description' | translate }} ({{ form.description.length }}/1000)</span
         ><textarea
           name="description"
           [(ngModel)]="form.description"
           placeholder="Describe qué ocurrió, condición del paciente y acción tomada"
+          maxlength="1000"
           required
         ></textarea>
       </label>

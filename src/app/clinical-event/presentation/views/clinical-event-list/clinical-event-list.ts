@@ -63,8 +63,12 @@ export class ClinicalEventListComponent implements OnInit {
       return this.translate.instant("events.validation.patientRequired");
     if (this.form.title.trim().length < 4)
       return this.translate.instant("events.validation.titleRequired");
+    if (this.form.title.trim().length > 120)
+      return this.translate.instant("events.validation.titleTooLong");
     if (this.form.description.trim().length < 10)
       return this.translate.instant("events.validation.descriptionRequired");
+    if (this.form.description.trim().length > 1000)
+      return this.translate.instant("events.validation.descriptionTooLong");
     return null;
   }
 }

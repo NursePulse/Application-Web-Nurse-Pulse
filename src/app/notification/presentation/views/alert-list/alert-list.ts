@@ -79,6 +79,13 @@ export class AlertListComponent implements OnInit {
       return;
     }
 
+    if (this.form.description.trim().length > 255) {
+      this.errorMessage.set(
+        this.translate.instant("alerts.descriptionTooLong"),
+      );
+      return;
+    }
+
     this.store.createManualAlert(
       {
         patientId: this.form.patientId,

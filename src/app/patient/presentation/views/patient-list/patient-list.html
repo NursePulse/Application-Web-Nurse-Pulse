@@ -40,6 +40,9 @@
           name="firstName"
           [(ngModel)]="form.firstName"
           placeholder="Ej. Carlos"
+          pattern="^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]+$"
+          maxlength="80"
+          title="Solo letras"
           required
         />
       </label>
@@ -50,6 +53,9 @@
           name="lastName"
           [(ngModel)]="form.lastName"
           placeholder="Ej. Mendoza"
+          pattern="^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]+$"
+          maxlength="80"
+          title="Solo letras"
           required
         />
       </label>
@@ -60,6 +66,10 @@
           name="documentNumber"
           [(ngModel)]="form.documentNumber"
           placeholder="Ej. 12345678"
+          pattern="^[0-9]+$"
+          minlength="8"
+          maxlength="20"
+          title="Solo números"
           required
         />
       </label>
@@ -70,6 +80,8 @@
           name="birthDate"
           [(ngModel)]="form.birthDate"
           type="date"
+          [min]="minBirthDate"
+          [max]="maxBirthDate"
           required
         />
       </label>
@@ -89,6 +101,7 @@
           name="diagnosis"
           [(ngModel)]="form.diagnosis"
           placeholder="Ej. Cardiac arrhythmia"
+          maxlength="180"
           required
         />
       </label>
@@ -99,6 +112,7 @@
           name="roomNumber"
           [(ngModel)]="form.roomNumber"
           placeholder="Ej. UCI-204"
+          maxlength="20"
           required
         />
       </label>
@@ -109,18 +123,19 @@
           name="bedNumber"
           [(ngModel)]="form.bedNumber"
           placeholder="Ej. B-02"
+          maxlength="20"
           required
         />
       </label>
 
       <label class="form-field">
         <span>Médico tratante *</span>
-        <input
-          name="attendingPhysician"
-          [(ngModel)]="form.attendingPhysician"
-          placeholder="Ej. Dr. Alejandro Torres"
-          required
-        />
+        <select name="attendingPhysician" [(ngModel)]="form.attendingPhysician" required>
+          <option value="" disabled>Selecciona un médico</option>
+          @for (doctor of doctors(); track doctor.id) {
+          <option [value]="doctor.displayName">{{ doctor.displayName }}</option>
+          }
+        </select>
       </label>
 
       <label class="form-field">

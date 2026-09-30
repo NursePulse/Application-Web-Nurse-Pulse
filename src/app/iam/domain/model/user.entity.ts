@@ -5,7 +5,15 @@ export class User {
     public readonly id: string,
     public readonly username: string,
     public readonly roles: UserRole[],
+    public readonly firstName?: string,
+    public readonly lastName?: string,
   ) {}
+
+  get displayName(): string {
+    if (this.firstName && this.lastName)
+      return `${this.firstName} ${this.lastName}`;
+    return this.username;
+  }
 
   get primaryRole(): UserRole {
     if (this.roles.includes("ROLE_ADMIN")) return "ROLE_ADMIN";

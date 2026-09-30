@@ -101,12 +101,20 @@ export class SbarListComponent implements OnInit {
       return this.translate.instant("sbar.validation.receiverRequired");
     if (this.form.situation.trim().length < 8)
       return this.translate.instant("sbar.validation.situation");
+    if (this.form.situation.trim().length > 1000)
+      return this.translate.instant("sbar.validation.situationTooLong");
     if (this.form.background.trim().length < 8)
       return this.translate.instant("sbar.validation.background");
+    if (this.form.background.trim().length > 1000)
+      return this.translate.instant("sbar.validation.backgroundTooLong");
     if (this.form.assessment.trim().length < 8)
       return this.translate.instant("sbar.validation.assessment");
+    if (this.form.assessment.trim().length > 1000)
+      return this.translate.instant("sbar.validation.assessmentTooLong");
     if (this.form.recommendation.trim().length < 8)
       return this.translate.instant("sbar.validation.recommendation");
+    if (this.form.recommendation.trim().length > 1000)
+      return this.translate.instant("sbar.validation.recommendationTooLong");
     return null;
   }
 }

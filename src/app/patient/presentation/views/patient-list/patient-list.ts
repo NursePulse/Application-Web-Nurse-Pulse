@@ -4,10 +4,15 @@ import { PatientStore } from "../../../application/patient.store";
 import { Router } from "@angular/router";
 import { TranslatePipe } from "@ngx-translate/core";
 import { AuthStore } from "@iam/application/auth.store";
+import { UsersStore } from "@iam/application/users.store";
 import {
   Patient,
   PatientStatusEnum,
 } from "../../../domain/model/patient.entity";
+
+const NAME_PATTERN = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ ]+$/;
+const DOCUMENT_PATTERN = /^[0-9]+$/;
+const MIN_BIRTH_DATE = "1930-01-01";
 
 @Component({
   selector: "app-patient-list",
@@ -18,8 +23,16 @@ import {
 })
 export class PatientListComponent implements OnInit {
   protected store = inject(PatientStore);
+  protected usersStore = inject(UsersStore);
   private router = inject(Router);
   private authStore = inject(AuthStore);
+
+  protected readonly minBirthDate = MIN_BIRTH_DATE;
+  protected readonly maxBirthDate = this.todayLocalDate();
+
+  protected doctors() {
+    return this.usersStore.users().filter((u) => u.roles.includes("ROLE_DOCTOR"));
+  }
 
   /** Only nurses and admins can admit a new patient; doctors can view/update only. */
   protected canCreatePatient(): boolean {
@@ -41,6 +54,7 @@ export class PatientListComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.loadPatients();
+    this.usersStore.loadUsers();
   }
 
   private emptyForm() {
@@ -191,6 +205,29 @@ export class PatientListComponent implements OnInit {
       this.errorMessage.set(
         "Completa nombres, apellidos, documento, diagnóstico, habitación, cama y médico.",
       );
+      return;
+    }
+
+    if (
+      !NAME_PATTERN.test(this.form.firstName.trim()) ||
+      !NAME_PATTERN.test(this.form.lastName.trim())
+    ) {
+      this.errorMessage.set("Nombres y apellidos solo pueden contener letras.");
+      return;
+    }
+
+    if (!DOCUMENT_PATTERN.test(this.form.documentNumber.trim())) {
+      this.errorMessage.set("El documento clínico solo puede contener números.");
+      return;
+    }
+
+    if (this.form.birthDate < MIN_BIRTH_DATE) {
+      this.errorMessage.set("La fecha de nacimiento no puede ser anterior a 1930.");
+      return;
+    }
+
+    if (this.form.birthDate > this.maxBirthDate) {
+      this.errorMessage.set("La fecha de nacimiento no puede ser futura.");
       return;
     }
 

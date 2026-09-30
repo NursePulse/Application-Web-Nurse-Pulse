@@ -13,6 +13,8 @@ export class UserAssembler {
       String(response.id),
       response.username,
       roles.length > 0 ? roles : ["ROLE_NURSE"],
+      "firstName" in response ? response.firstName : undefined,
+      "lastName" in response ? response.lastName : undefined,
     );
   }
 }
