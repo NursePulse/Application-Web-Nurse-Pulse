@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from "@angular/core";
-import { catchError, forkJoin, map, of, switchMap } from "rxjs";
+import { catchError, finalize, forkJoin, map, of, switchMap } from "rxjs";
 import { Report, ReportStatus } from "../domain/model/report.entity";
 import { ReportAssembler } from "../infrastructure/report-assembler";
 import { ReportResponse } from "../infrastructure/report-response";
@@ -25,6 +25,7 @@ export class ReportStore {
 
   private readonly _reports = signal<Report[]>([]);
   readonly reports = this._reports.asReadonly();
+  readonly generating = signal(false);
 
   loadReports(): void {
     const reports = this.readStoredReports()
@@ -37,6 +38,8 @@ export class ReportStore {
   generateReport(
     form: Pick<ReportResponse, "type" | "title" | "startDate" | "endDate">,
   ): void {
+    if (this.generating()) return;
+    this.generating.set(true);
     this.patientsApi
       .getAll()
       .pipe(
@@ -61,6 +64,7 @@ export class ReportStore {
             auditLogs: this.auditApi.getAll().pipe(catchError(() => of([]))),
           });
         }),
+        finalize(() => this.generating.set(false)),
       )
       .subscribe((data) => {
         const start = new Date(form.startDate).getTime();

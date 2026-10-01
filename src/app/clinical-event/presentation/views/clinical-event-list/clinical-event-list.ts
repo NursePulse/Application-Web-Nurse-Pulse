@@ -35,6 +35,7 @@ export class ClinicalEventListComponent implements OnInit {
   }
 
   save(): void {
+    if (this.store.saving()) return;
     this.errorMessage.set(this.validateForm());
     if (this.errorMessage()) return;
 

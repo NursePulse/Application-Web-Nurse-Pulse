@@ -39,6 +39,7 @@ export class ReportListComponent implements OnInit {
   }
 
   save(): void {
+    if (this.store.generating()) return;
     this.errorMessage.set(this.validateForm());
     if (this.errorMessage()) return;
 

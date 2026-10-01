@@ -28,6 +28,7 @@ export class VitalSignStore {
   private readonly _vitalSigns = signal<VitalSign[]>([]);
   readonly vitalSigns = this._vitalSigns.asReadonly();
   readonly errorKey = signal<string | null>(null);
+  readonly saving = signal(false);
 
   loadVitalSigns(): void {
     this.errorKey.set(null);
@@ -63,6 +64,8 @@ export class VitalSignStore {
   }
 
   recordVitalSign(form: VitalSignForm, onSuccess?: () => void): void {
+    if (this.saving()) return;
+    this.saving.set(true);
     this.errorKey.set(null);
 
     const request = {
@@ -94,9 +97,13 @@ export class VitalSignStore {
         );
 
         this.createAlertsWhenNeeded(sign);
+        this.saving.set(false);
         onSuccess?.();
       },
-      error: () => this.errorKey.set("vitals.errors.save"),
+      error: () => {
+        this.saving.set(false);
+        this.errorKey.set("vitals.errors.save");
+      },
     });
   }
 

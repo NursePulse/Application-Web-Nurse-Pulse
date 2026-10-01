@@ -47,6 +47,7 @@ export class NotificationStore {
   private readonly _pendingAlertIds = signal<ReadonlySet<string>>(new Set());
   private readonly _actionErrorKey = signal<string | null>(null);
   readonly actionErrorKey = this._actionErrorKey.asReadonly();
+  readonly saving = signal(false);
 
   loadAlerts(): void {
     this._actionErrorKey.set(null);
@@ -63,6 +64,8 @@ export class NotificationStore {
   }
 
   createManualAlert(request: ManualAlertPayload, onSuccess?: () => void): void {
+    if (this.saving()) return;
+    this.saving.set(true);
     this._actionErrorKey.set(null);
 
     const payload = {
@@ -84,9 +87,13 @@ export class NotificationStore {
           AuditAction.ALERT_CREATED,
           `Creó alerta para ${alert.patientName}: ${alert.title}`,
         );
+        this.saving.set(false);
         onSuccess?.();
       },
-      error: () => this._actionErrorKey.set("alerts.errors.save"),
+      error: () => {
+        this.saving.set(false);
+        this._actionErrorKey.set("alerts.errors.save");
+      },
     });
   }
 

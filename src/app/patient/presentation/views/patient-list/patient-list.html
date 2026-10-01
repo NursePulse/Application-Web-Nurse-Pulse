@@ -166,7 +166,7 @@
         <button class="btn-secondary" type="button" (click)="cancelForm()">
           {{ 'common.cancel' | translate }}
         </button>
-        <button class="btn-primary" type="submit">
+        <button class="btn-primary" type="submit" [disabled]="store.saving()">
           {{ editingPatientId() ? 'Actualizar paciente' : ('patients.save' |
           translate) }}
         </button>

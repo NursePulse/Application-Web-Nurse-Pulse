@@ -14,6 +14,7 @@ export class PatientStore {
   private _patients = signal<Patient[]>([]);
   readonly patients = this._patients.asReadonly();
   readonly errorKey = signal<string | null>(null);
+  readonly saving = signal(false);
 
   loadPatients(): void {
     this.errorKey.set(null);
@@ -24,6 +25,8 @@ export class PatientStore {
   }
 
   createPatient(request: RegisterPatientRequest, onSuccess?: () => void): void {
+    if (this.saving()) return;
+    this.saving.set(true);
     this.errorKey.set(null);
     this.api.create(request).subscribe({
       next: (created) => {
@@ -33,9 +36,13 @@ export class PatientStore {
           AuditAction.PATIENT_CREATED,
           `Registró al paciente ${patient.fullName}`,
         );
+        this.saving.set(false);
         onSuccess?.();
       },
-      error: () => this.errorKey.set("patients.errors.save"),
+      error: () => {
+        this.saving.set(false);
+        this.errorKey.set("patients.errors.save");
+      },
     });
   }
 
@@ -44,6 +51,8 @@ export class PatientStore {
     request: RegisterPatientRequest,
     onSuccess?: () => void,
   ): void {
+    if (this.saving()) return;
+    this.saving.set(true);
     this.errorKey.set(null);
     this.api.update(patientId, request).subscribe({
       next: (updated) => {
@@ -51,9 +60,13 @@ export class PatientStore {
         this._patients.update((list) =>
           list.map((p) => (p.id === patient.id ? patient : p)),
         );
+        this.saving.set(false);
         onSuccess?.();
       },
-      error: () => this.errorKey.set("patients.errors.save"),
+      error: () => {
+        this.saving.set(false);
+        this.errorKey.set("patients.errors.save");
+      },
     });
   }
 

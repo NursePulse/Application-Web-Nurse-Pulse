@@ -21,6 +21,7 @@ export class ClinicalEventStore {
   private readonly _events = signal<ClinicalEvent[]>([]);
   readonly events = this._events.asReadonly();
   readonly errorKey = signal<string | null>(null);
+  readonly saving = signal(false);
 
   loadEvents(): void {
     this.errorKey.set(null);
@@ -47,7 +48,9 @@ export class ClinicalEventStore {
     severity: string;
     title: string;
     description: string;
-  }): void {
+  }, onSuccess?: () => void): void {
+    if (this.saving()) return;
+    this.saving.set(true);
     this.errorKey.set(null);
     this.api.register(ClinicalEventAssembler.toRequest(form)).subscribe({
       next: (created) => {
@@ -63,8 +66,13 @@ export class ClinicalEventStore {
         );
 
         this.createAlertWhenNeeded(event);
+        this.saving.set(false);
+        onSuccess?.();
       },
-      error: () => this.errorKey.set("events.errors.save"),
+      error: () => {
+        this.saving.set(false);
+        this.errorKey.set("events.errors.save");
+      },
     });
   }
 

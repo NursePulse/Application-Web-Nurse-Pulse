@@ -73,7 +73,7 @@
           (click)="showForm.set(false)"
         >
           {{ 'common.cancel' | translate }}</button
-        ><button class="btn-primary" type="submit">
+        ><button class="btn-primary" type="submit" [disabled]="store.saving()">
           {{ 'events.save' | translate }}
         </button>
       </div>

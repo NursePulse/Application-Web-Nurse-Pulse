@@ -65,6 +65,7 @@ export class AlertListComponent implements OnInit {
   }
 
   saveAlert(): void {
+    if (this.store.saving()) return;
     this.errorMessage.set(null);
 
     if (!this.form.patientId) {

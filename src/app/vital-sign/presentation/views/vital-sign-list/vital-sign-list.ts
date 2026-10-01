@@ -47,6 +47,7 @@ export class VitalSignListComponent implements OnInit {
   }
 
   save(): void {
+    if (this.store.saving()) return;
     if (!this.canRecordVitalSigns()) {
       this.errorMessage.set("No tienes permiso para registrar signos vitales.");
       return;

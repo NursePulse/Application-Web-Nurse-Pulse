@@ -171,6 +171,7 @@ export class PatientListComponent implements OnInit {
   }
 
   savePatient(): void {
+    if (this.store.saving()) return;
     this.errorMessage.set(null);
 
     const editingId = this.editingPatientId();
