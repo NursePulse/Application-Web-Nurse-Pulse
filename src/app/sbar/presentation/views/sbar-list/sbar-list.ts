@@ -59,6 +59,7 @@ export class SbarListComponent implements OnInit {
   }
 
   save(): void {
+    if (this.store.saving()) return;
     if (!this.canManageHandovers()) {
       this.errorMessage.set("No tienes permiso para registrar traspasos.");
       return;

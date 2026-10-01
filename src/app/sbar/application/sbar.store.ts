@@ -30,6 +30,7 @@ export class SbarStore {
   private readonly _transfers = signal<SbarTransfer[]>([]);
   readonly transfers = this._transfers.asReadonly();
   readonly errorKey = signal<string | null>(null);
+  readonly saving = signal(false);
 
   loadTransfers(): void {
     this.errorKey.set(null);
@@ -73,6 +74,8 @@ export class SbarStore {
   }
 
   registerTransfer(form: SbarForm, onSuccess?: () => void): void {
+    if (this.saving()) return;
+    this.saving.set(true);
     this.errorKey.set(null);
     const patient = this.patients
       .patients()
@@ -114,9 +117,13 @@ export class SbarStore {
             AuditAction.SBAR_TRANSFER,
             `Registró traspaso SBAR para ${transfer.patientName} enviado a ${receiverName}`,
           );
+          this.saving.set(false);
           onSuccess?.();
         },
-        error: () => this.errorKey.set("sbar.errors.save"),
+        error: () => {
+          this.saving.set(false);
+          this.errorKey.set("sbar.errors.save");
+        },
       });
   }
 
