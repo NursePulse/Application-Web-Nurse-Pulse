@@ -10,12 +10,11 @@ describe("SignUpComponent", () => {
             signUp: vi.fn(),
             signIn: vi.fn(),
         };
-        const router = { navigate: vi.fn() };
         const component = Object.create(SignUpComponent.prototype) as any;
         component.authStore = authStore;
-        component.router = router;
         component.errorKey = signal<string | null>(null);
-        return { component, authStore, router, getError: () => component.errorKey() };
+        component.registeredEmail = signal<string | null>(null);
+        return { component, authStore, getError: () => component.errorKey() };
     }
 
     function fillValidForm(component: any): void {
@@ -60,11 +59,10 @@ describe("SignUpComponent", () => {
         expect(getError()).toBe("access.errors.nameFormat");
     });
 
-    it("submits the complete payload and signs in after registration", () => {
-        const { component, authStore, router } = createComponent();
+    it("submits the complete payload and shows the verify-email screen, without signing in", () => {
+        const { component, authStore } = createComponent();
         fillValidForm(component);
         authStore.signUp.mockReturnValue(of({ id: 1, username: "nurse.maria", roles: ["ROLE_NURSE"] }));
-        authStore.signIn.mockReturnValue(of({ id: 1, username: "nurse.maria", roles: ["ROLE_NURSE"] }));
 
         component.submit();
 
@@ -77,11 +75,8 @@ describe("SignUpComponent", () => {
             email: "maria@example.com",
             role: "ROLE_NURSE",
         }));
-        expect(authStore.signIn).toHaveBeenCalledWith({
-            username: "nurse.maria",
-            password: "NursePulse1!",
-        });
-        expect(router.navigate).toHaveBeenCalledWith(["/dashboard"]);
+        expect(authStore.signIn).not.toHaveBeenCalled();
+        expect(component.registeredEmail()).toBe("maria@example.com");
     });
 
     it("maps a duplicate username response", () => {

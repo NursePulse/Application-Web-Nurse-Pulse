@@ -43,6 +43,9 @@ export class SignInComponent {
       if (error.status === 401 || error.status === 404) {
         return "access.errors.invalidCredentials";
       }
+      if (error.status === 422) {
+        return "access.errors.emailNotVerified";
+      }
       if (error.status === 0) {
         return "access.errors.network";
       }

@@ -1,9 +1,8 @@
 import { Component, inject, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { HttpErrorResponse } from "@angular/common/http";
 import { TranslatePipe } from "@ngx-translate/core";
-import { switchMap } from "rxjs";
 import { AuthStore } from "../../../application/auth.store";
 import { ClinicalRegistrationRole } from "../../../infrastructure/sign-up.request";
 import { LanguageSwitcherComponent } from "@shared/presentation/components/language-switcher/language-switcher";
@@ -18,8 +17,8 @@ const PASSWORD_POLICY_PATTERN = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9\s]).{12,20
   styleUrls: ["../sign-in/sign-in.css", "./sign-up.css"],
 })
 export class SignUpComponent {
-  private readonly router = inject(Router);
   protected readonly authStore = inject(AuthStore);
+  protected readonly registeredEmail = signal<string | null>(null);
 
   protected username = "";
   protected firstName = "";
@@ -82,10 +81,10 @@ export class SignUpComponent {
     }
 
     this.errorKey.set(null);
-    const credentials = { username, password: this.password };
     this.authStore
       .signUp({
-        ...credentials,
+        username,
+        password: this.password,
         firstName,
         lastName,
         phone,
@@ -93,9 +92,8 @@ export class SignUpComponent {
         email,
         role: this.selectedRole,
       })
-      .pipe(switchMap(() => this.authStore.signIn(credentials)))
       .subscribe({
-        next: () => this.router.navigate(["/dashboard"]),
+        next: () => this.registeredEmail.set(email),
         error: (error: unknown) => this.errorKey.set(this.toErrorKey(error)),
       });
   }

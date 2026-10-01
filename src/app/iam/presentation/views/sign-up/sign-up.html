@@ -12,6 +12,16 @@
       <app-language-switcher></app-language-switcher>
     </div>
 
+    @if (registeredEmail()) {
+    <div class="access-copy">
+      <span>{{ 'access.eyebrow' | translate }}</span>
+      <h1>{{ 'access.verifyEmailTitle' | translate }}</h1>
+      <p>{{ 'access.verifyEmailSubtitle' | translate: { email: registeredEmail() } }}</p>
+    </div>
+    <p class="access-alt">
+      <a routerLink="/sign-in">{{ 'access.backToSignIn' | translate }}</a>
+    </p>
+    } @else {
     <div class="access-copy">
       <span>{{ 'access.eyebrow' | translate }}</span>
       <h1>{{ 'access.signUpTitle' | translate }}</h1>
@@ -174,6 +184,7 @@
         <a routerLink="/sign-in">{{ 'access.signIn' | translate }}</a>
       </p>
     </form>
+    }
   </section>
 
   <aside class="access-preview">
