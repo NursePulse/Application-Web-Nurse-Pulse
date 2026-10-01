@@ -49,7 +49,19 @@ export class SignInComponent {
       if (error.status === 0) {
         return "access.errors.network";
       }
+      const backendMessage = this.extractBackendMessage(error);
+      if (backendMessage) {
+        return backendMessage;
+      }
     }
     return "access.errors.generic";
+  }
+
+  private extractBackendMessage(error: HttpErrorResponse): string | null {
+    const body = error.error;
+    if (body && typeof body === "object") {
+      return body.details ?? body.message ?? null;
+    }
+    return null;
   }
 }

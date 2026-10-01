@@ -88,4 +88,43 @@ describe("SignUpComponent", () => {
 
         expect(getError()).toBe("access.errors.usernameTaken");
     });
+
+    it("maps a duplicate email conflict to its own error key", () => {
+        const { component, authStore, getError } = createComponent();
+        fillValidForm(component);
+        authStore.signUp.mockReturnValue(throwError(() => new HttpErrorResponse({
+            status: 409,
+            error: { code: "USER_CONFLICT", message: "User already exists", details: "Email already exists" },
+        })));
+
+        component.submit();
+
+        expect(getError()).toBe("access.errors.emailTaken");
+    });
+
+    it("maps a duplicate phone conflict to its own error key", () => {
+        const { component, authStore, getError } = createComponent();
+        fillValidForm(component);
+        authStore.signUp.mockReturnValue(throwError(() => new HttpErrorResponse({
+            status: 409,
+            error: { code: "USER_CONFLICT", message: "User already exists", details: "Phone already exists" },
+        })));
+
+        component.submit();
+
+        expect(getError()).toBe("access.errors.phoneTaken");
+    });
+
+    it("shows the real backend message for an unmapped error status", () => {
+        const { component, authStore, getError } = createComponent();
+        fillValidForm(component);
+        authStore.signUp.mockReturnValue(throwError(() => new HttpErrorResponse({
+            status: 500,
+            error: { code: "UNEXPECTED_ERROR", message: "Unexpected error in sign-up", details: "Database connection timed out" },
+        })));
+
+        component.submit();
+
+        expect(getError()).toBe("Database connection timed out");
+    });
 });

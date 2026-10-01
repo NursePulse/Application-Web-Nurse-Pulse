@@ -100,16 +100,39 @@ export class SignUpComponent {
 
   private toErrorKey(error: unknown): string {
     if (error instanceof HttpErrorResponse) {
+      if (error.status === 0) {
+        return "access.errors.network";
+      }
       if (error.status === 409) {
-        return "access.errors.usernameTaken";
+        return this.toConflictErrorKey(error);
+      }
+      const backendMessage = this.extractBackendMessage(error);
+      if (backendMessage) {
+        return backendMessage;
       }
       if (error.status === 400) {
         return "access.errors.invalidData";
       }
-      if (error.status === 0) {
-        return "access.errors.network";
-      }
     }
     return "access.errors.generic";
+  }
+
+  private toConflictErrorKey(error: HttpErrorResponse): string {
+    const reason = this.extractBackendMessage(error) ?? "";
+    if (/email/i.test(reason)) {
+      return "access.errors.emailTaken";
+    }
+    if (/phone/i.test(reason)) {
+      return "access.errors.phoneTaken";
+    }
+    return "access.errors.usernameTaken";
+  }
+
+  private extractBackendMessage(error: HttpErrorResponse): string | null {
+    const body = error.error;
+    if (body && typeof body === "object") {
+      return body.details ?? body.message ?? null;
+    }
+    return null;
   }
 }

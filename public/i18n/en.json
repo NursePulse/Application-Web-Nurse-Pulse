@@ -455,6 +455,8 @@
   "access.errors.verificationAttempts": "Too many attempts. Request a new code later.",
   "access.errors.passwordMismatch": "Passwords do not match.",
   "access.errors.usernameTaken": "That username is not available.",
+  "access.errors.emailTaken": "That email address is already registered to another account.",
+  "access.errors.phoneTaken": "That phone number is already registered to another account.",
   "access.errors.invalidData": "Please check the entered data. The password must be 12 to 20 characters long, with at least one uppercase letter and one special character.",
   "common.subscriptions": "Subscriptions",
   "sidebar.subscriptions": "Subscriptions",

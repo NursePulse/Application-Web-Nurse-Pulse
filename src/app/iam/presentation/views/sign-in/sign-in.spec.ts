@@ -55,4 +55,21 @@ describe("SignInComponent", () => {
 
         expect(getError()).toBe("access.errors.invalidCredentials");
     });
+
+    it("shows the real backend message for an unmapped error status", () => {
+        const { component, authStore, getError } = createComponent();
+        authStore.signIn.mockReturnValue({
+            subscribe: (observer: { error: (value: unknown) => void }) =>
+                observer.error(new HttpErrorResponse({
+                    status: 500,
+                    error: { code: "UNEXPECTED_ERROR", message: "Unexpected error in sign-in", details: "Database connection timed out" },
+                })),
+        });
+        component.username = "nurse.maria";
+        component.password = "NursePulse123!";
+
+        (component as any).submit();
+
+        expect(getError()).toBe("Database connection timed out");
+    });
 });
