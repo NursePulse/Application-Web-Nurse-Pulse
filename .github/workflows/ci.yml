@@ -30,3 +30,14 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Lighthouse audit (deployed sign-in page)
+        run: npx lighthouse https://application-web-nurse-pulse.vercel.app/sign-in --chrome-flags="--headless --no-sandbox" --output=json --output=html --output-path=./lighthouse-report --quiet
+        continue-on-error: true
+
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: lighthouse-report.report.*
+        continue-on-error: true
