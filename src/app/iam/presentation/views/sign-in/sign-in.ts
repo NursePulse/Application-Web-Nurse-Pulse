@@ -50,6 +50,10 @@ export class SignInComponent {
         return "access.errors.network";
       }
       const backendMessage = this.extractBackendMessage(error);
+      // The backend answers wrong credentials with 400 (VALIDATION_ERROR), not 401.
+      if (error.status === 400 && /invalid username or password/i.test(backendMessage ?? "")) {
+        return "access.errors.invalidCredentials";
+      }
       if (backendMessage) {
         return backendMessage;
       }

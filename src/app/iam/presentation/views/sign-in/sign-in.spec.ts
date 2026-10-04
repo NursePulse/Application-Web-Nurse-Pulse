@@ -56,6 +56,23 @@ describe("SignInComponent", () => {
         expect(getError()).toBe("access.errors.invalidCredentials");
     });
 
+    it("maps the backend's 400 wrong-credentials response to the translated error", () => {
+        const { component, authStore, getError } = createComponent();
+        authStore.signIn.mockReturnValue({
+            subscribe: (observer: { error: (value: unknown) => void }) =>
+                observer.error(new HttpErrorResponse({
+                    status: 400,
+                    error: { code: "VALIDATION_ERROR", message: "Validation failed", details: "Invalid username or password" },
+                })),
+        });
+        component.username = "nurse.maria";
+        component.password = "wrong-password";
+
+        (component as any).submit();
+
+        expect(getError()).toBe("access.errors.invalidCredentials");
+    });
+
     it("shows the real backend message for an unmapped error status", () => {
         const { component, authStore, getError } = createComponent();
         authStore.signIn.mockReturnValue({
