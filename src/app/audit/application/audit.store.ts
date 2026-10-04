@@ -50,6 +50,8 @@ export class AuditStore {
         link.click();
         URL.revokeObjectURL(url);
         this.exportingPdf.set(false);
+        // The backend records the export itself; reload so the new entry shows up.
+        this.loadLogs();
       },
       error: () => this.exportingPdf.set(false),
     });
